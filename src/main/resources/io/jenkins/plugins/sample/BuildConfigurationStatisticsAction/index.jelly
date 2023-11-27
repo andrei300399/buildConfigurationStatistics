@@ -30,10 +30,13 @@
                         }
                 </style>
         </head>
-        <st:adjunct includes="io.jenkins.plugins.sample.HelloWorldAction.declareChartJsClickArray"/>
-        <l:layout title="Greeting">
+
+        <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.declareChartJsClickArray"/>
+        <l:layout title="Build Configuration Statistics">
+
+
                 <l:side-panel>
-                        <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
+                        <st:include page="sidepanel.jelly" it="${it.job}" optional="true" />
                 </l:side-panel>
                 <l:main-panel>
                         <h1>
@@ -156,5 +159,5 @@
 
                 </l:main-panel>
         </l:layout>
-        <st:adjunct includes="io.jenkins.plugins.sample.HelloWorldAction.chartLogicBox"/>
+        <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.chartLogicBox"/>
 </j:jelly>

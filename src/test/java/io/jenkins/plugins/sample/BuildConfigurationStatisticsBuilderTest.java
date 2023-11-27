@@ -5,7 +5,7 @@ package io.jenkins.plugins.sample;
 import org.junit.Test;
 
 
-public class HelloWorldBuilderTest {
+public class BuildConfigurationStatisticsBuilderTest {
 
     final String name = "Bobby";
 

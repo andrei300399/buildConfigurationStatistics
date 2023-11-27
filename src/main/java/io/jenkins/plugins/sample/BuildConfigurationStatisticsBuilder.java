@@ -14,12 +14,12 @@ import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
+public class BuildConfigurationStatisticsBuilder extends Builder implements SimpleBuildStep {
 
     private final String name;
 
     @DataBoundConstructor
-    public HelloWorldBuilder(String name) {
+    public BuildConfigurationStatisticsBuilder(String name) {
         this.name = name;
     }
     public String getName() {
@@ -30,7 +30,6 @@ public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
     @Override
     public void perform(Run<?, ?> run, FilePath workspace, EnvVars env, Launcher launcher, TaskListener listener)
             throws InterruptedException, IOException {
-        run.addAction(new HelloWorldAction(name));
         listener.getLogger().println("Hello, " + name + "!");
         listener.getLogger().println("Hello, " + run + "!");
         listener.getLogger().println("Hello, " + run.getParent().getBuilds() + "!");
@@ -48,7 +47,7 @@ public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
 
         @Override
         public String getDisplayName() {
-            return Messages.HelloWorldBuilder_DescriptorImpl_DisplayName();
+            return Messages.BuildConfigurationStatisticsBuilder_DescriptorImpl_DisplayName();
         }
     }
 }
