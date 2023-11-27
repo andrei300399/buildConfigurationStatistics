@@ -1,0 +1,160 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+        <head>
+                <style>
+                        .graph-container {
+                        width: 90%;
+
+                        }
+                        .graph-block{
+                                padding: 5px;
+                                border: 1px solid grey;
+                                margin: 10px;
+                                display: flex;
+
+                        }
+                        .canvas-container{
+                        width: 80%;
+
+                        }
+                        .settings{
+                        padding: 5px;
+
+                        margin: 10px;
+                        display: flex;
+                        flex-direction: column;
+
+                        }
+                        form label{
+                        margin: 5px;
+                        }
+                </style>
+        </head>
+        <st:adjunct includes="io.jenkins.plugins.sample.HelloWorldAction.declareChartJsClickArray"/>
+        <l:layout title="Greeting">
+                <l:side-panel>
+                        <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
+                </l:side-panel>
+                <l:main-panel>
+                        <h1>
+                                ${it.run.getParent().getRootDir().getAbsolutePath()}
+                                Name: ${it.name}
+                        </h1>
+                        <div class="graph-container">
+
+
+                        <div class="graph-block">
+                                <div class="canvas-container">
+                                <canvas id="successRateChart" width="90" height="15"></canvas>
+                                </div>
+                                <form class="settings">
+                                        <label>
+                                                Range:
+                                                <select>
+                                                        <option>Month</option>
+                                                        <option>Day</option>
+                                                        <option>Year</option>
+                                                </select>
+
+                                        </label>
+
+                                </form>
+                        </div>
+                        <div class="graph-block">
+                                <div class="canvas-container">
+                                <canvas id="buildDurationChart" width="90" height="15"></canvas>
+                                </div>
+                                <form class="settings">
+                                        <label>
+                                                Range:
+                                                <select>
+                                                        <option>Month</option>
+                                                        <option>Day</option>
+                                                        <option>Year</option>
+                                                </select>
+
+                                        </label>
+                                        <label>
+                                        Average:
+                                        <input type="checkbox"/>
+                                        </label>
+                                        <label>
+                                                Show failed:
+                                                <input type="checkbox"/>
+                                        </label>
+
+                                </form>
+                        </div>
+                        <div class="graph-block">
+                                <div class="canvas-container">
+                                <canvas id="timeSpentQueue" width="90" height="15"></canvas>
+                                </div>
+                                <form class="settings">
+                                        <label>
+                                                Range:
+                                                <select>
+                                                        <option>Month</option>
+                                                        <option>Day</option>
+                                                        <option>Year</option>
+                                                </select>
+
+                                        </label>
+                                        <label>
+                                                Average:
+                                                <input type="checkbox"/>
+                                        </label>
+
+                                </form>
+                        </div>
+                        <div class="graph-block">
+                                <div class="canvas-container">
+                                <canvas id="testCount" width="90" height="15"></canvas>
+                                </div>
+                                <form class="settings">
+                                        <label>
+                                                Range:
+                                                <select>
+                                                        <option>Month</option>
+                                                        <option>Day</option>
+                                                        <option>Year</option>
+                                                </select>
+
+                                        </label>
+                                        <label>
+                                                Show failed:
+                                                <input type="checkbox"/>
+                                        </label>
+
+                                </form>
+                        </div>
+                        <div class="graph-block">
+                                <div class="canvas-container">
+                                <canvas id="artifactsSize" width="90" height="15"></canvas>
+                                </div>
+                                <form class="settings">
+                                        <label>
+                                                Range:
+                                                <select>
+                                                        <option>Month</option>
+                                                        <option>Day</option>
+                                                        <option>Year</option>
+                                                </select>
+
+                                        </label>
+                                        <label>
+                                                Average:
+                                                <input type="checkbox"/>
+                                        </label>
+                                        <label>
+                                                Show failed:
+                                                <input type="checkbox"/>
+                                        </label>
+
+                                </form>
+                        </div>
+                        </div>
+
+                </l:main-panel>
+        </l:layout>
+        <st:adjunct includes="io.jenkins.plugins.sample.HelloWorldAction.chartLogicBox"/>
+</j:jelly>
