@@ -2,6 +2,9 @@
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
         <head>
                 <style>
+                        .buildDuration{
+                                display:none;
+                        }
                         .graph-container {
                         width: 90%;
 
@@ -33,19 +36,18 @@
 
         <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.declareChartJsClickArray"/>
         <l:layout title="Build Configuration Statistics">
-
-
                 <l:side-panel>
                         <st:include page="sidepanel.jelly" it="${it.job}" optional="true" />
                 </l:side-panel>
                 <l:main-panel>
-                        <h1>
-                                ${it.run.getParent().getRootDir().getAbsolutePath()}
-                                Name: ${it.name}
-                        </h1>
+                        <h1>Statistics for job ${it.job.name}</h1>
+                        <j:forEach var="type" items="${it.getBuildDuration()}">
+                                <p class="buildDuration">
+                                        <span class="key">${type.key}</span>
+                                        <span class="value">${type.value}</span>
+                                </p>
+                        </j:forEach>
                         <div class="graph-container">
-
-
                         <div class="graph-block">
                                 <div class="canvas-container">
                                 <canvas id="successRateChart" width="90" height="15"></canvas>

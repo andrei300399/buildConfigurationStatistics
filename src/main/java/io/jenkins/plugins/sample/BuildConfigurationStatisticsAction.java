@@ -2,25 +2,16 @@ package io.jenkins.plugins.sample;
 
 import hudson.model.Action;
 import hudson.model.Job;
-import hudson.model.Run;
-import jenkins.model.RunAction2;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
 
-import java.io.IOException;
+import java.text.ParseException;
+import java.util.Map;
 
 public class BuildConfigurationStatisticsAction implements Action {
 
-    private String name;
-    private transient Run run;
-    Job job;
+    private Job job;
 
     public BuildConfigurationStatisticsAction(Job job) {
         this.job = job;
-    }
-
-    public String getName() {
-        return name;
     }
 
     @Override
@@ -37,14 +28,13 @@ public class BuildConfigurationStatisticsAction implements Action {
     public String getUrlName() {
         return "buildConfigurationStatistics";
     }
-    
 
-    public Run getRun() {
-        return run;
+    public Job getJob() {
+        return job;
     }
 
-    public void doReprocessBlameReport(StaplerRequest request, StaplerResponse response) throws IOException {
-        String originalRequestURI = request.getOriginalRequestURI();
-        response.sendRedirect(originalRequestURI.substring(0, originalRequestURI.lastIndexOf('/')));
+    public Map<Integer, Double> getBuildDuration() throws ParseException {
+        return new BuildDurationLogic("month", job.getBuilds()).getBuildsDuration();
     }
+
 }

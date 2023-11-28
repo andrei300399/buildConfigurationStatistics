@@ -16,11 +16,21 @@ const data = {
   }]
 };
 
+var buildDuration = document.querySelectorAll(".buildDuration");
+var dataBuildDurationValues = Array.from({length: 30}, () => 0);
+for (var i=0; i<buildDuration.length; i++){
+    console.log(buildDuration[i]);
+    dataBuildDurationValues.splice(parseInt(buildDuration[i].querySelector('.key').textContent, 10) - 1, 1, parseFloat(buildDuration[i].querySelector('.value').textContent));
+    console.log(dataBuildDurationValues[i]);
+}
+
+
+
 const dataBuildDuration = {
   labels: labels,
   datasets: [{
     label: 'Build duration',
-    data: Array.from({length: 30}, () => Math.floor(Math.random() * 60)),
+    data: dataBuildDurationValues,
     borderColor: [
       'rgba(0, 180, 33, 1)',
     ],
