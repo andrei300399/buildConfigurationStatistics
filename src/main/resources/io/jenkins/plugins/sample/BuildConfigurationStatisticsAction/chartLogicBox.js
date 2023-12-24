@@ -16,21 +16,50 @@ const data = {
   }]
 };
 
-var buildDuration = document.querySelectorAll(".buildDuration");
-var dataBuildDurationValues = Array.from({length: 30}, () => 0);
-for (var i=0; i<buildDuration.length; i++){
-    console.log(buildDuration[i]);
-    dataBuildDurationValues.splice(parseInt(buildDuration[i].querySelector('.key').textContent, 10) - 1, 1, parseFloat(buildDuration[i].querySelector('.value').textContent));
-    console.log(dataBuildDurationValues[i]);
+
+function sortOnKeys(dict) {
+
+    var sorted = [];
+    for(var key in dict) {
+        sorted[sorted.length] = key;
+    }
+    sorted.sort();
+
+    var dataBuildDurationValues = [];
+    var labelsB = [];
+    for(var i = 0; i < sorted.length; i++) {
+       dataBuildDurationValues.push(dict[sorted[i]]);
+       var dateFormat= new Date(parseInt(sorted[i]));
+       labelsB.push(
+            dateFormat.getDate()+
+                       "/"+(dateFormat.getMonth()+1)+
+                       "/"+dateFormat.getFullYear()
+       );
+    }
+    return [dataBuildDurationValues, labelsB];
 }
+
+var buildDuration = document.querySelectorAll(".buildDuration");
+var dataBuildDurationValues = [];//Array.from({length: buildDuration.}, () => 0);
+var dataBuildDurationDict = {};//Array.from({length: buildDuration.}, () => 0);
+
+for (var i=0; i<buildDuration.length; i++){
+
+    dataBuildDurationDict[Date.parse(buildDuration[i].querySelector('.key').textContent)] = parseFloat(buildDuration[i].querySelector('.value').textContent);
+    console.log(dataBuildDurationDict);
+}
+
+dict = sortOnKeys(dataBuildDurationDict)[0];
+labelsB = sortOnKeys(dataBuildDurationDict)[1];
+console.log("asd",dict);
 
 
 
 const dataBuildDuration = {
-  labels: labels,
+  labels: labelsB,
   datasets: [{
     label: 'Build duration',
-    data: dataBuildDurationValues,
+    data: dict,
     borderColor: [
       'rgba(0, 180, 33, 1)',
     ],

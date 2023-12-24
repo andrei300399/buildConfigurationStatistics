@@ -1,14 +1,12 @@
 package io.jenkins.plugins.sample;
 
-
 import hudson.Extension;
 import hudson.model.Action;
 import hudson.model.Job;
-import jenkins.model.TransientActionFactory;
-
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
+import javax.annotation.Nonnull;
+import jenkins.model.TransientActionFactory;
 
 @Extension
 public class BuildConfigurationStatisticsFactory extends TransientActionFactory<Job> {

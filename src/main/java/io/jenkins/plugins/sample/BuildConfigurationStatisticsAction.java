@@ -2,6 +2,7 @@ package io.jenkins.plugins.sample;
 
 import hudson.model.Action;
 import hudson.model.Job;
+import org.kohsuke.stapler.bind.JavaScriptMethod;
 
 import java.text.ParseException;
 import java.util.Map;
@@ -33,8 +34,12 @@ public class BuildConfigurationStatisticsAction implements Action {
         return job;
     }
 
-    public Map<Integer, Double> getBuildDuration() throws ParseException {
-        return new BuildDurationLogic("month", job.getBuilds()).getBuildsDuration();
+    public Map<String, Double> getBuildDuration() throws ParseException {
+        return new BuildDurationLogic(IntervalDate.YEAR, job.getBuilds()).getBuildsDuration();
     }
 
+    @JavaScriptMethod
+    public Map<String, Double> mark(String job1) throws ParseException {
+        return new BuildDurationLogic(IntervalDate.YEAR, job.getBuilds()).getBuildsDuration();
+    }
 }

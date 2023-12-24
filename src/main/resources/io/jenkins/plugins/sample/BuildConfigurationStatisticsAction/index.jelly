@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler" xmlns:f="/lib/form">
         <head>
                 <style>
                         .buildDuration{
@@ -31,10 +31,12 @@
                         form label{
                         margin: 5px;
                         }
+
                 </style>
         </head>
 
         <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.declareChartJsClickArray"/>
+        <st:bind var="myItem" value="${it}"/>
         <l:layout title="Build Configuration Statistics">
                 <l:side-panel>
                         <st:include page="sidepanel.jelly" it="${it.job}" optional="true" />
@@ -50,7 +52,7 @@
                         <div class="graph-container">
                         <div class="graph-block">
                                 <div class="canvas-container">
-                                <canvas id="successRateChart" width="90" height="15"></canvas>
+                                <canvas id="successRateChart" width="90" height="25"></canvas>
                                 </div>
                                 <form class="settings">
                                         <label>
@@ -67,16 +69,18 @@
                         </div>
                         <div class="graph-block">
                                 <div class="canvas-container">
-                                <canvas id="buildDurationChart" width="90" height="15"></canvas>
+                                <canvas id="buildDurationChart" width="90" height="25"></canvas>
                                 </div>
                                 <form class="settings">
                                         <label>
                                                 Range:
-                                                <select>
+                                                <f:entry field="classification">
+                                                <select onchange="myItem.mark('${job.fullName}')">
                                                         <option>Month</option>
                                                         <option>Day</option>
                                                         <option>Year</option>
                                                 </select>
+                                                </f:entry>
 
                                         </label>
                                         <label>
@@ -92,7 +96,7 @@
                         </div>
                         <div class="graph-block">
                                 <div class="canvas-container">
-                                <canvas id="timeSpentQueue" width="90" height="15"></canvas>
+                                <canvas id="timeSpentQueue" width="90" height="25"></canvas>
                                 </div>
                                 <form class="settings">
                                         <label>
@@ -113,7 +117,7 @@
                         </div>
                         <div class="graph-block">
                                 <div class="canvas-container">
-                                <canvas id="testCount" width="90" height="15"></canvas>
+                                <canvas id="testCount" width="90" height="25"></canvas>
                                 </div>
                                 <form class="settings">
                                         <label>
@@ -134,7 +138,7 @@
                         </div>
                         <div class="graph-block">
                                 <div class="canvas-container">
-                                <canvas id="artifactsSize" width="90" height="15"></canvas>
+                                <canvas id="artifactsSize" width="90" height="25"></canvas>
                                 </div>
                                 <form class="settings">
                                         <label>

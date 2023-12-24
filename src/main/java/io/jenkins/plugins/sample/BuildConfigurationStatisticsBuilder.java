@@ -22,10 +22,10 @@ public class BuildConfigurationStatisticsBuilder extends Builder implements Simp
     public BuildConfigurationStatisticsBuilder(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
-
 
     @Override
     public void perform(Run<?, ?> run, FilePath workspace, EnvVars env, Launcher launcher, TaskListener listener)
