@@ -74,13 +74,14 @@
                                 <form class="settings">
                                         <label>
                                                 Range:
-                                                <f:entry field="classification">
-                                                <select onchange="myItem.mark('${job.fullName}')">
+                                                <f:entry title="My Plugin Action">
+                                                <select  url="${rootURL}/buildConfigurationStatistics?intervalDate=MONTH">
                                                         <option>Month</option>
                                                         <option>Day</option>
                                                         <option>Year</option>
                                                 </select>
                                                 </f:entry>
+
 
                                         </label>
                                         <label>

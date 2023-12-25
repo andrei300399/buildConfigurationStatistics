@@ -12,17 +12,17 @@ public class BuildSuccessRateLogic extends BuildLogic {
         super(period, buildList);
     }
 
-    public Map<Integer, Double> getBuildsDuration() throws ParseException {
+    public Map<String, Double> getSuccessRate() throws ParseException {
         filterPeriodBuild();
-        Map<Integer, Double> dayDuration = new HashMap<Integer, Double>();
+        Map<String, Double> successRate = new HashMap<String, Double>();
         for (Run run : this.buildList) {
-            int day = DateTimeHandler.getDayOfMonth(DateTimeHandler.convertLongTimeToDate(run.getStartTimeInMillis()));
-            if (dayDuration.containsKey(day)) {
-                dayDuration.put(day, dayDuration.get(day) + run.getDuration() / 1000.0);
+            String day = DateTimeHandler.dateToString(DateTimeHandler.convertLongTimeToDate(run.getStartTimeInMillis()));
+            if (successRate.containsKey(day)) {
+                successRate.put(day, successRate.get(day) + run.getDuration() / 1000.0);
             } else {
-                dayDuration.put(day, run.getDuration() / 1000.0);
+                successRate.put(day, run.getDuration() / 1000.0);
             }
         }
-        return dayDuration;
+        return successRate;
     }
 }
