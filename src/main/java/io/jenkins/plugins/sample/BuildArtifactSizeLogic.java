@@ -9,7 +9,7 @@ import java.util.Map;
 public class BuildArtifactSizeLogic extends BuildLogic {
 
     public BuildArtifactSizeLogic(IntervalDate period, RunList<Run> buildList) {
-        super(period, buildList);
+        super(period, true,buildList);
     }
 
     public Map<Integer, Double> getBuildsDuration() throws ParseException {

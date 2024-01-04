@@ -9,14 +9,15 @@ import java.util.Map;
 public class BuildSuccessRateLogic extends BuildLogic {
 
     public BuildSuccessRateLogic(IntervalDate period, RunList<Run> buildList) {
-        super(period, buildList);
+        super(period,true, buildList);
     }
 
     public Map<String, Double> getSuccessRate() throws ParseException {
         filterPeriodBuild();
         Map<String, Double> successRate = new HashMap<String, Double>();
         for (Run run : this.buildList) {
-            String day = DateTimeHandler.dateToString(DateTimeHandler.convertLongTimeToDate(run.getStartTimeInMillis()));
+            String day =
+                    DateTimeHandler.dateToString(DateTimeHandler.convertLongTimeToDate(run.getStartTimeInMillis()));
             if (successRate.containsKey(day)) {
                 successRate.put(day, successRate.get(day) + run.getDuration() / 1000.0);
             } else {

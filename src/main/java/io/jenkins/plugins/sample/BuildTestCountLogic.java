@@ -9,7 +9,7 @@ import java.util.Map;
 public class BuildTestCountLogic extends BuildLogic {
 
     public BuildTestCountLogic(IntervalDate period, RunList<Run> buildList) {
-        super(period, buildList);
+        super(period, true,buildList);
     }
 
     public Map<Integer, Double> getBuildsDuration() throws ParseException {

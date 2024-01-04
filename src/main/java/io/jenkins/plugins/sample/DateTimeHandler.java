@@ -7,9 +7,11 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DateTimeHandler {
+
     public static Date convertLongTimeToDate(long time) {
         Date date = new Date(time);
         return date;
@@ -33,22 +35,40 @@ public class DateTimeHandler {
         return c.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
+    public static int getLastMonthDays() {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, -1);
+        return c.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
     public static String dateToString(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String strDate = dateFormat.format(date);
         return strDate;
     }
 
+    /**
+     * Create map format {23.12: 0.0, 24.12: 0.0 ...}
+     * on 30-31 days
+     *
+     * **/
     public static HashMap<String, Double> createDateMonthMap() {
         ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(1);
+        Logger LOGGER;
+        LOGGER = Logger.getLogger(DateTimeHandler.class.getName());
+        LOGGER.log(Level.INFO, "dateTime" + dateTime);
         HashMap<String, Double> dayDuration = new HashMap<String, Double>();
-        int lenMonth = getCurrentMonthDays();
-        for (int i = 0; i < lenMonth; i++) {
+        int lenMonth = getLastMonthDays();
+        LOGGER.log(Level.INFO, "lenMonth: " + lenMonth);
+        for (int i = 1; i <= lenMonth; i++) {
+
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String strDate = dateFormat.format(Date.from(dateTime.plusDays(i).toInstant()).getTime());
+            String strDate = dateFormat.format(
+                    Date.from(dateTime.plusDays(i).toInstant()).getTime());
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
             dayDuration.put(strDate, 0.0);
         }
-
+        LOGGER.log(Level.INFO, "dayDuration: " + dayDuration.entrySet());
         return dayDuration;
     }
 }

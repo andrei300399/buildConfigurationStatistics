@@ -1,5 +1,6 @@
 package io.jenkins.plugins.sample;
 
+import hudson.model.Result;
 import hudson.model.Run;
 import hudson.util.RunList;
 import java.text.ParseException;
@@ -10,9 +11,12 @@ public class BuildLogic {
     IntervalDate period;
     RunList<Run> buildList;
 
-    public BuildLogic(IntervalDate period, RunList<Run> buildList) {
+    Boolean failed;
+
+    public BuildLogic(IntervalDate period, Boolean failed, RunList<Run> buildList) {
         this.period = period;
         this.buildList = buildList;
+        this.failed = failed;
     }
 
     public void filterPeriodBuild() {
@@ -69,6 +73,14 @@ public class BuildLogic {
                 break;
             case ALL:
                 break;
+        }
+    }
+
+    public void filterFailedBuild() {
+        if (!failed) {
+            this.buildList = buildList.filter(run -> {
+                return run.getResult().isBetterOrEqualTo(Result.SUCCESS);
+            });
         }
     }
 }

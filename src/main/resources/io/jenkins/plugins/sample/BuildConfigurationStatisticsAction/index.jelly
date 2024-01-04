@@ -36,14 +36,14 @@
         </head>
 
         <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.declareChartJsClickArray"/>
-        <st:bind var="myItem" value="${it}"/>
         <l:layout title="Build Configuration Statistics">
                 <l:side-panel>
                         <st:include page="sidepanel.jelly" it="${it.job}" optional="true" />
                 </l:side-panel>
                 <l:main-panel>
+
                         <h1>Statistics for job ${it.job.name}</h1>
-                        <j:forEach var="type" items="${it.getBuildDuration()}">
+                        <j:forEach var="type" items="${it.getBuildDuration('MONTH', '1','1')}">
                                 <p class="buildDuration">
                                         <span class="key">${type.key}</span>
                                         <span class="value">${type.value}</span>
@@ -75,7 +75,7 @@
                                         <label>
                                                 Range:
                                                 <f:entry title="My Plugin Action">
-                                                <select  url="${rootURL}/buildConfigurationStatistics?intervalDate=MONTH">
+                                                <select>
                                                         <option>Month</option>
                                                         <option>Day</option>
                                                         <option>Year</option>

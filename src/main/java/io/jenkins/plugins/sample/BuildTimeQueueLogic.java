@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class BuildTimeQueueLogic extends BuildLogic {
     public BuildTimeQueueLogic(IntervalDate period, RunList<Run> buildList) {
-        super(period, buildList);
+        super(period, true,buildList);
     }
 
     public Map<Integer, Double> getBuildsDuration() throws ParseException {

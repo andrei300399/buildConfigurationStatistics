@@ -16,24 +16,14 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 public class BuildConfigurationStatisticsBuilder extends Builder implements SimpleBuildStep {
 
-    private final String name;
-
     @DataBoundConstructor
-    public BuildConfigurationStatisticsBuilder(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
+    public BuildConfigurationStatisticsBuilder() {}
 
     @Override
     public void perform(Run<?, ?> run, FilePath workspace, EnvVars env, Launcher launcher, TaskListener listener)
             throws InterruptedException, IOException {
-        listener.getLogger().println("Hello, " + name + "!");
         listener.getLogger().println("Hello, " + run + "!");
         listener.getLogger().println("Hello, " + run.getParent().getBuilds() + "!");
-        listener.getLogger().println("Hello, " + run.getParent().getConfigFile().asString() + "!");
     }
 
     @Symbol("greet")
