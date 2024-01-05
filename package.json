@@ -1,0 +1,12 @@
+{
+  "name": "buildconfigurationstatistics",
+  "version": "1.0.0",
+  "description": "TODO Describe what your plugin does here",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

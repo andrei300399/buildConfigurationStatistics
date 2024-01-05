@@ -16,8 +16,8 @@ public class BuildSuccessRateLogic extends BuildLogic {
         filterPeriodBuild();
         Map<String, Double> successRate = new HashMap<String, Double>();
         for (Run run : this.buildList) {
-            String day =
-                    DateTimeHandler.dateToString(DateTimeHandler.convertLongTimeToDate(run.getStartTimeInMillis()));
+            String day ="kjk";
+                    //DateTimeHandler.dateToString(DateTimeHandler.convertLongTimeToDate(run.getStartTimeInMillis()));
             if (successRate.containsKey(day)) {
                 successRate.put(day, successRate.get(day) + run.getDuration() / 1000.0);
             } else {

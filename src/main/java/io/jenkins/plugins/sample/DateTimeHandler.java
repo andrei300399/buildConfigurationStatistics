@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 
 public class DateTimeHandler {
 
+    static Logger LOGGER = Logger.getLogger(DateTimeHandler.class.getName());
+
     public static Date convertLongTimeToDate(long time) {
         Date date = new Date(time);
         return date;
@@ -41,8 +43,20 @@ public class DateTimeHandler {
         return c.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
-    public static String dateToString(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//    public static int getLastMonths() {
+//        Calendar c = Calendar.getInstance();
+//        c.add(Calendar.MONTH, -1);
+//        return c.getActualMaximum(Calendar.DAY_OF_MONTH);
+//    }
+
+    public static String dateToString(Date date, String format) {
+        DateFormat dateFormat = new SimpleDateFormat(format);
+        String strDate = dateFormat.format(date);
+        return strDate;
+    }
+
+    public static String dateMonthToString(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
         String strDate = dateFormat.format(date);
         return strDate;
     }
@@ -70,5 +84,34 @@ public class DateTimeHandler {
         }
         LOGGER.log(Level.INFO, "dayDuration: " + dayDuration.entrySet());
         return dayDuration;
+    }
+
+    /**
+     * Create map format {2/2022: 0.0, 3/2022: 0.0 ...}
+     * on 12 month
+     *
+     * **/
+    public static HashMap<String, Double> createDateYearMap() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusYears(1);
+        LOGGER.log(Level.INFO, "last year dateTime" + dateTime);
+        HashMap<String, Double> monthDuration = new HashMap<String, Double>();
+        int lengthYear = 12; // any year length in month
+        LOGGER.log(Level.INFO, "lengthYear: " + lengthYear);
+        for (int i = 1; i <= lengthYear; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+
+            //get dateTime previous year + i = 1...12 and getTime, after in strDate=2022-03
+            String strDate = dateFormat.format(
+                    Date.from(
+                            dateTime.plusMonths(i).toInstant()
+                    ).getTime()
+            );
+
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            monthDuration.put(strDate, 0.0);
+        }
+        LOGGER.log(Level.INFO, "monthDuration: " + monthDuration.entrySet());
+        return monthDuration;
     }
 }

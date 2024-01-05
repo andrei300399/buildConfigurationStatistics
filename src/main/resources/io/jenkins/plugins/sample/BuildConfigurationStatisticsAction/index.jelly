@@ -2,7 +2,7 @@
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler" xmlns:f="/lib/form">
         <head>
                 <style>
-                        .buildDuration{
+                        .buildDuration, .period{
                                 display:none;
                         }
                         .graph-container {
@@ -43,7 +43,8 @@
                 <l:main-panel>
 
                         <h1>Statistics for job ${it.job.name}</h1>
-                        <j:forEach var="type" items="${it.getBuildDuration('MONTH', '1','1')}">
+                        <p class="period">MONTH</p>
+                        <j:forEach var="type" items="${it.getBuildDuration('MONTH', '1','0')}">
                                 <p class="buildDuration">
                                         <span class="key">${type.key}</span>
                                         <span class="value">${type.value}</span>

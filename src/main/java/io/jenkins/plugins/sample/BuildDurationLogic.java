@@ -7,8 +7,12 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class BuildDurationLogic extends BuildLogic {
     static Logger LOGGER = Logger.getLogger(BuildDurationLogic.class.getName());
+    HashMap<String, Double> dateFormatDuration;
+    HashMap<String, Double> monthDuration;
+    String dateFormatKey;
 
     public BuildDurationLogic(IntervalDate period, Boolean failed, RunList<Run> buildList) {
         super(period, failed, buildList);
@@ -17,31 +21,46 @@ public class BuildDurationLogic extends BuildLogic {
     public Map<String, Double> getBuildsDuration(Boolean average) throws ParseException {
         filterPeriodBuild();
         filterFailedBuild();
-        HashMap<String, Double> dayDuration = DateTimeHandler.createDateMonthMap();
+        switch (this.period){
+            case MONTH:
+                dateFormatDuration = DateTimeHandler.createDateMonthMap();
+                dateFormatKey = "yyyy-MM-dd";
+                break;
+            case YEAR:
+                dateFormatDuration = DateTimeHandler.createDateYearMap();
+                dateFormatKey = "yyyy-MM";
+                break;
+        }
+
+
         HashMap<String, Integer> dayDurationAverage = new HashMap<>();
         for (Run run : this.buildList) {
-            String day =
-                    DateTimeHandler.dateToString(DateTimeHandler.convertLongTimeToDate(run.getStartTimeInMillis()));
-            LOGGER.log(Level.INFO, "day: " + day);
-            if (dayDuration.get(day) == 0.0) {
-                dayDuration.put(day, run.getDuration() / 1000.0);
-                dayDurationAverage.put(day, 1);
+            String dateFormatKeyAfterCheckPeriod =
+                    DateTimeHandler.dateToString(
+                            DateTimeHandler.convertLongTimeToDate(
+                                    run.getStartTimeInMillis()
+                            ), dateFormatKey
+                    );
+            LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod: " + dateFormatKeyAfterCheckPeriod);
+            if (dateFormatDuration.get(dateFormatKeyAfterCheckPeriod) == 0.0) {
+                dateFormatDuration.put(dateFormatKeyAfterCheckPeriod, run.getDuration() / 1000.0);
+                dayDurationAverage.put(dateFormatKeyAfterCheckPeriod, 1);
             } else {
-                dayDuration.put(day, dayDuration.get(day) + run.getDuration() / 1000.0);
-                dayDurationAverage.put(day, dayDurationAverage.get(day) + 1);
+                dateFormatDuration.put(dateFormatKeyAfterCheckPeriod, dateFormatDuration.get(dateFormatKeyAfterCheckPeriod) + run.getDuration() / 1000.0);
+                dayDurationAverage.put(dateFormatKeyAfterCheckPeriod, dayDurationAverage.get(dateFormatKeyAfterCheckPeriod) + 1);
             }
         }
         if (average) {
             for (Map.Entry<String, Integer> entry : dayDurationAverage.entrySet()) {
-                LOGGER.log(Level.INFO, "sum time duration: " + dayDuration.get(entry.getKey()));
+                LOGGER.log(Level.INFO, "sum time duration: " + dateFormatDuration.get(entry.getKey()));
                 LOGGER.log(Level.INFO, "count runs: " + entry.getValue());
-                dayDuration.put(entry.getKey(),
-                        dayDuration.get(entry.getKey())/entry.getValue()
+                dateFormatDuration.put(entry.getKey(),
+                        dateFormatDuration.get(entry.getKey())/entry.getValue()
                 );
             }
         }
-        LOGGER.log(Level.INFO, "dayDuration: " + dayDuration);
+        LOGGER.log(Level.INFO, "dateFormatDuration: " + dateFormatDuration);
         LOGGER.log(Level.INFO, "dayDurationAverage: " + dayDurationAverage);
-        return dayDuration;
+        return dateFormatDuration;
     }
 }

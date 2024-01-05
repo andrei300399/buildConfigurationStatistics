@@ -1,3 +1,4 @@
+
 const labels = Array.from({length: 30}, (_, i) => i + 1);
 const data = {
   labels: labels,
@@ -16,6 +17,26 @@ const data = {
   }]
 };
 
+function formatLabelsDate(arrLabels, dateFormat, period) {
+switch(period) {
+    case 'MONTH':
+                 arrLabels.push(
+                            dateFormat.getDate()+
+                                       "/"+(dateFormat.getMonth()+1)+
+                                       "/"+dateFormat.getFullYear()
+                       );
+    break;
+
+    case 'YEAR':
+                 arrLabels.push(
+(dateFormat.getMonth()+1)+"/"+dateFormat.getFullYear()
+                       );
+    break;
+
+}
+}
+
+
 
 function sortOnKeys(dict) {
 
@@ -30,24 +51,25 @@ function sortOnKeys(dict) {
     for(var i = 0; i < sorted.length; i++) {
        dataBuildDurationValues.push(dict[sorted[i]]);
        var dateFormat= new Date(parseInt(sorted[i]));
-       labelsB.push(
-            dateFormat.getDate()+
-                       "/"+(dateFormat.getMonth()+1)+
-                       "/"+dateFormat.getFullYear()
-       );
+       console.log("dateFormat", dateFormat);
+       var period = document.querySelector(".period").textContent;
+       formatLabelsDate(labelsB, dateFormat, period);
     }
     return [dataBuildDurationValues, labelsB];
 }
 
 var buildDuration = document.querySelectorAll(".buildDuration");
+
 var dataBuildDurationValues = [];//Array.from({length: buildDuration.}, () => 0);
 var dataBuildDurationDict = {};//Array.from({length: buildDuration.}, () => 0);
 
 for (var i=0; i<buildDuration.length; i++){
 
-    dataBuildDurationDict[Date.parse(buildDuration[i].querySelector('.key').textContent)] = parseFloat(buildDuration[i].querySelector('.value').textContent);
-    console.log(dataBuildDurationDict);
+    dataBuildDurationDict[Date.parse(buildDuration[i].querySelector('.key').textContent)]
+        = parseFloat(buildDuration[i].querySelector('.value').textContent);
+
 }
+console.log("dataBuildDurationDict: ", dataBuildDurationDict);
 
 dict = sortOnKeys(dataBuildDurationDict)[0];
 labelsB = sortOnKeys(dataBuildDurationDict)[1];
