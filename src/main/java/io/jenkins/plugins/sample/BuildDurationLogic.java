@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class BuildDurationLogic extends BuildLogic {
     static Logger LOGGER = Logger.getLogger(BuildDurationLogic.class.getName());
     HashMap<String, Double> dateFormatDuration;
-    HashMap<String, Double> monthDuration;
+    //HashMap<String, Double> monthDuration;
     String dateFormatKey;
 
     public BuildDurationLogic(IntervalDate period, Boolean failed, RunList<Run> buildList) {

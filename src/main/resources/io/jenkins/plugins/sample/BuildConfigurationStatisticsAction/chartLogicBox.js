@@ -1,21 +1,4 @@
 
-const labels = Array.from({length: 30}, (_, i) => i + 1);
-const data = {
-  labels: labels,
-  datasets: [{
-    label: 'Success rate',
-    data: Array.from({length: 30}, () => Math.floor(Math.random() * 100)),
-    backgroundColor: [
-      'rgba(0, 255, 0, 0.5)',
-    ],
-    borderColor: [
-      'rgb(0, 69, 36)',
-    ],
-    categoryPercentage: 1,
-    borderWidth: 1,
-    barPercentage: 1,
-  }]
-};
 
 function formatLabelsDate(arrLabels, dateFormat, period) {
 switch(period) {
@@ -75,6 +58,40 @@ dict = sortOnKeys(dataBuildDurationDict)[0];
 labelsB = sortOnKeys(dataBuildDurationDict)[1];
 console.log("asd",dict);
 
+var successRate = document.querySelectorAll(".successRate");
+
+var dataSuccessRateValues = [];
+var dataSuccessRateDict = {};
+
+for (var i=0; i<successRate.length; i++){
+
+    dataSuccessRateDict[Date.parse(successRate[i].querySelector('.key').textContent)]
+        = parseFloat(successRate[i].querySelector('.value').textContent);
+
+}
+console.log("dataSuccessRateDict: ", dataSuccessRateDict);
+
+dictSuccess = sortOnKeys(dataSuccessRateDict)[0];
+labelsSuccess = sortOnKeys(dataSuccessRateDict)[1];
+console.log("asd",dictSuccess);
+
+const labels = Array.from({length: 30}, (_, i) => i + 1);
+const data = {
+  labels: labelsSuccess,
+  datasets: [{
+    label: 'Success rate',
+    data: dictSuccess,
+    backgroundColor: [
+      'rgba(0, 255, 0, 0.5)',
+    ],
+    borderColor: [
+      'rgb(0, 69, 36)',
+    ],
+    categoryPercentage: 1,
+    borderWidth: 1,
+    barPercentage: 1,
+  }]
+};
 
 
 const dataBuildDuration = {

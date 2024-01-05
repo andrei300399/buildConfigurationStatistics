@@ -46,6 +46,8 @@ public class BuildConfigurationStatisticsAction implements Action {
     }
 
     public Map<String, Double> getBuildSuccessRate(String period) throws ParseException {
+        Logger LOGGER = Logger.getLogger("uuu1");
+        LOGGER.log(Level.INFO, "arg jelly period success: " + period);
         IntervalDate intreval = IntervalDate.valueOf(period);
         return new BuildSuccessRateLogic(intreval, job.getBuilds()).getSuccessRate();
     }

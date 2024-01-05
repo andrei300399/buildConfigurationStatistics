@@ -86,6 +86,28 @@ public class DateTimeHandler {
         return dayDuration;
     }
 
+    public static HashMap<String, HashMap<String,Integer>> createDateMonthMapSuccessRate() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(1);
+        LOGGER.log(Level.INFO, "dateTime" + dateTime);
+        HashMap<String, HashMap<String,Integer>> successFailSuccess = new HashMap();
+        int lenMonth = getLastMonthDays();
+        LOGGER.log(Level.INFO, "lenMonth: " + lenMonth);
+        for (int i = 1; i <= lenMonth; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            //get dateTime previous month + i = 1...31 day and getTime, after in strDate=2022-03-22
+            String strDate = dateFormat.format(
+                    Date.from(dateTime.plusDays(i).toInstant()).getTime());
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            successFailSuccess.put(strDate, new HashMap(){{
+                put("fail", 0);
+                put("success", 0);
+            }});
+        }
+        LOGGER.log(Level.INFO, "successFailSuccess: " + successFailSuccess.entrySet());
+        return successFailSuccess;
+    }
+
     /**
      * Create map format {2/2022: 0.0, 3/2022: 0.0 ...}
      * on 12 month
@@ -114,4 +136,28 @@ public class DateTimeHandler {
         LOGGER.log(Level.INFO, "monthDuration: " + monthDuration.entrySet());
         return monthDuration;
     }
+
+    public static HashMap<String, HashMap<String,Integer>> createDateYearMapSuccessRate() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusYears(1);
+        LOGGER.log(Level.INFO, "last year dateTime success" + dateTime);
+        HashMap<String, HashMap<String,Integer>> successFailSuccess = new HashMap();
+        int lenMonth = 12;
+        LOGGER.log(Level.INFO, "lenMonth: " + lenMonth);
+        for (int i = 1; i <= lenMonth; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+            //get dateTime previous year + i = 1...12 and getTime, after in strDate=2022-03
+            String strDate = dateFormat.format(
+                    Date.from(dateTime.plusMonths(i).toInstant()).getTime());
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            successFailSuccess.put(strDate, new HashMap(){{
+                put("fail", 0);
+                put("success", 0);
+            }});
+        }
+        LOGGER.log(Level.INFO, "successFailSuccess: " + successFailSuccess.entrySet());
+        return successFailSuccess;
+    }
 }
+
+
