@@ -2,12 +2,21 @@ package io.jenkins.plugins.sample;
 
 import hudson.model.Action;
 import hudson.model.Job;
+import jenkins.security.stapler.StaplerDispatchable;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.bind.JavaScriptMethod;
+import org.kohsuke.stapler.interceptor.RequirePOST;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BuildConfigurationStatisticsAction implements Action {
+
+
 
     private Job job;
 
@@ -67,6 +76,11 @@ public class BuildConfigurationStatisticsAction implements Action {
         return new BuildSuccessRateLogic(intreval, job.getBuilds()).getSuccessRate();
     }
 
+//    @JavaScriptMethod
+//    public int add(int x, int y) {
+//        return x+y;
+//    }
+
     //    @JavaScriptMethod
     //    public Map<String, Double> mark(String job1) throws ParseException {
     //        return new BuildDurationLogic(IntervalDate.YEAR, job.getBuilds()).getBuildsDuration();
@@ -79,4 +93,16 @@ public class BuildConfigurationStatisticsAction implements Action {
     //        myPluginAction.getBuildDuration(intervalDate);
     //        response.sendRedirect2(request.getContextPath() + "/jenkins");
     //    }
+    @JavaScriptMethod
+    @RequirePOST
+    public void mark(String job) {
+        Logger LOGGER = Logger.getLogger("uuu2");
+        LOGGER.log(Level.WARNING, "js test");
+    }
+
+    @StaplerDispatchable
+    public void doMark(StaplerRequest req, StaplerResponse res) throws IOException {
+        Logger LOGGER = Logger.getLogger("uuu3");
+        LOGGER.log(Level.WARNING, "js stepler");
+    }
 }

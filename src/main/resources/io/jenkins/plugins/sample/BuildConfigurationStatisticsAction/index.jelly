@@ -35,14 +35,28 @@
                 </style>
         </head>
 
-        <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.declareChartJsClickArray"/>
+
         <l:layout title="Build Configuration Statistics">
+
                 <l:side-panel>
                         <st:include page="sidepanel.jelly" it="${it.job}" optional="true" />
                 </l:side-panel>
                 <l:main-panel>
 
                         <h1>Statistics for job ${it.job.name}</h1>
+                        <div id="msg" />
+<!--                        <script>-->
+<!--                                var foo = <st:bind value="${it}"/>-->
+
+<!--                                foo.add(1,5, function(t) {-->
+<!--                                document.getElementById('msg').innerHTML = t.responseObject();-->
+<!--                                })-->
+<!--                        </script>-->
+
+                        <td>
+                                <f:checkbox name="selected" onclick="myItem.mark('${it.job.fullName}')" />
+                        </td>
+
                         <p class="period">YEAR</p>
                         <j:forEach var="type" items="${it.getBuildDuration('YEAR', '1','0')}">
                                 <p class="buildDuration">
@@ -172,6 +186,8 @@
                         </div>
 
                 </l:main-panel>
+                <st:bind var="myItem" value="${it}"/>
         </l:layout>
+        <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.declareChartJsClickArray"/>
         <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.chartLogicBox"/>
 </j:jelly>
