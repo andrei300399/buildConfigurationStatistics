@@ -77,6 +77,17 @@
       <artifactId>workflow-job</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.main</groupId>
+      <artifactId>jenkins-core</artifactId>
+<!--      <scope>test</scope>-->
+      <version>2.426</version>
+    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.jvnet.hudson.main</groupId>-->
+<!--      <artifactId>hudson-core</artifactId>-->
+<!--      <version>1.200</version>-->
+<!--    </dependency>-->
   </dependencies>
 
   <repositories>

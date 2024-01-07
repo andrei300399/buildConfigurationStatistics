@@ -1,17 +1,22 @@
 package io.jenkins.plugins.sample;
 
+import hudson.model.AbstractBuild;
 import hudson.model.Run;
+import hudson.model.Queue;
 import hudson.util.RunList;
+import jenkins.model.Jenkins;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.util.concurrent.TimeUnit;
+import hudson.model.AbstractBuild;
 
 public class BuildDurationLogic extends BuildLogic {
     static Logger LOGGER = Logger.getLogger(BuildDurationLogic.class.getName());
     HashMap<String, Double> dateFormatDuration;
-    //HashMap<String, Double> monthDuration;
     String dateFormatKey;
 
     public BuildDurationLogic(IntervalDate period, Boolean failed, RunList<Run> buildList) {
@@ -24,6 +29,10 @@ public class BuildDurationLogic extends BuildLogic {
         switch (this.period){
             case MONTH:
                 dateFormatDuration = DateTimeHandler.createDateMonthMap();
+                dateFormatKey = "yyyy-MM-dd";
+                break;
+            case WEEK:
+                dateFormatDuration = DateTimeHandler.createDateWeekMap();
                 dateFormatKey = "yyyy-MM-dd";
                 break;
             case YEAR:
@@ -44,6 +53,7 @@ public class BuildDurationLogic extends BuildLogic {
             LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod: " + dateFormatKeyAfterCheckPeriod);
             if (dateFormatDuration.get(dateFormatKeyAfterCheckPeriod) == 0.0) {
                 dateFormatDuration.put(dateFormatKeyAfterCheckPeriod, run.getDuration() / 1000.0);
+                LOGGER.log(Level.WARNING, "getDuration: " + run.getDuration());
                 dayDurationAverage.put(dateFormatKeyAfterCheckPeriod, 1);
             } else {
                 dateFormatDuration.put(dateFormatKeyAfterCheckPeriod, dateFormatDuration.get(dateFormatKeyAfterCheckPeriod) + run.getDuration() / 1000.0);
@@ -64,3 +74,5 @@ public class BuildDurationLogic extends BuildLogic {
         return dateFormatDuration;
     }
 }
+
+

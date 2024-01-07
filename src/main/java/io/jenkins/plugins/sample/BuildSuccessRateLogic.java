@@ -41,6 +41,10 @@ public class BuildSuccessRateLogic extends BuildLogic {
                 successRateOnFormatDate = DateTimeHandler.createDateMonthMapSuccessRate();
                 dateFormatKey = "yyyy-MM-dd";
                 break;
+            case WEEK:
+                successRateOnFormatDate = DateTimeHandler.createDateWeekMapSuccessRate();
+                dateFormatKey = "yyyy-MM-dd";
+                break;
             case YEAR:
                 successRateOnFormatDate = DateTimeHandler.createDateYearMapSuccessRate();
                 dateFormatKey = "yyyy-MM";
@@ -56,13 +60,8 @@ public class BuildSuccessRateLogic extends BuildLogic {
                     );
             LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod: " + dateFormatKeyAfterCheckPeriod);
             if (run.getResult().isBetterOrEqualTo(Result.SUCCESS)){
-//                HashMap<String, Integer> innerMap = new HashMap<String, Integer>();
-//                innerMap.put("success", (successRateOnFormatDate.get(dateFormatKeyAfterCheckPeriod).get("success")) + 1);
-//                successRateOnFormatDate.put(dateFormatKeyAfterCheckPeriod, innerMap);
                 successRateOnFormatDate.get(dateFormatKeyAfterCheckPeriod).put("success", (successRateOnFormatDate.get(dateFormatKeyAfterCheckPeriod).get("success")) + 1);
             } else {
-                //HashMap<String, Integer> innerMap = new HashMap<String, Integer>();
-                //innerMap.put("fail", (successRateOnFormatDate.get(dateFormatKeyAfterCheckPeriod).get("fail")) + 1);
                 successRateOnFormatDate.get(dateFormatKeyAfterCheckPeriod).put("fail", (successRateOnFormatDate.get(dateFormatKeyAfterCheckPeriod).get("fail")) + 1);
             }
             LOGGER.log(Level.INFO, "successRateOnFormatDate: " + successRateOnFormatDate);

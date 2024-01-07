@@ -2,6 +2,7 @@
 
 function formatLabelsDate(arrLabels, dateFormat, period) {
 switch(period) {
+    case 'WEEK':
     case 'MONTH':
                  arrLabels.push(
                             dateFormat.getDate()+
@@ -40,11 +41,11 @@ function sortOnKeys(dict) {
     }
     return [dataBuildDurationValues, labelsB];
 }
-
+// build Duration create chart settings
 var buildDuration = document.querySelectorAll(".buildDuration");
 
-var dataBuildDurationValues = [];//Array.from({length: buildDuration.}, () => 0);
-var dataBuildDurationDict = {};//Array.from({length: buildDuration.}, () => 0);
+var dataBuildDurationValues = [];
+var dataBuildDurationDict = {};
 
 for (var i=0; i<buildDuration.length; i++){
 
@@ -56,8 +57,9 @@ console.log("dataBuildDurationDict: ", dataBuildDurationDict);
 
 dict = sortOnKeys(dataBuildDurationDict)[0];
 labelsB = sortOnKeys(dataBuildDurationDict)[1];
-console.log("asd",dict);
+console.log("build duration dict values",dict);
 
+// build Duration create chart settings
 var successRate = document.querySelectorAll(".successRate");
 
 var dataSuccessRateValues = [];
@@ -73,9 +75,50 @@ console.log("dataSuccessRateDict: ", dataSuccessRateDict);
 
 dictSuccess = sortOnKeys(dataSuccessRateDict)[0];
 labelsSuccess = sortOnKeys(dataSuccessRateDict)[1];
-console.log("asd",dictSuccess);
+console.log("success rate dict values",dictSuccess);
+
+
+// time Queue create chart settings
+var timeQueue = document.querySelectorAll(".timeQueue");
+
+var dataTimeQueueValues = [];
+var dataTimeQueueDict = {};
+
+for (var i=0; i<timeQueue.length; i++){
+
+    dataTimeQueueDict[Date.parse(timeQueue[i].querySelector('.key').textContent)]
+        = parseFloat(timeQueue[i].querySelector('.value').textContent);
+
+}
+console.log("dataTimeQueueDict: ", dataTimeQueueDict);
+
+dictTimeQueue = sortOnKeys(dataTimeQueueDict)[0];
+labelsTimeQueue = sortOnKeys(dataTimeQueueDict)[1];
+console.log("time spent queue dict values",dictTimeQueue);
+
+// artifact create chart settings
+var artifactSize = document.querySelectorAll(".artifactSize");
+
+var dataArtifactSizeValues = [];
+var dataArtifactSizeDict = {};
+
+for (var i=0; i<artifactSize.length; i++){
+
+    dataArtifactSizeDict[Date.parse(artifactSize[i].querySelector('.key').textContent)]
+        = parseFloat(artifactSize[i].querySelector('.value').textContent);
+
+}
+console.log("dataArtifactSizeDict: ", dataArtifactSizeDict);
+
+dictArtifactSize = sortOnKeys(dataArtifactSizeDict)[0];
+labelsArtifactSize = sortOnKeys(dataArtifactSizeDict)[1];
+console.log("artifact size dict values",dictArtifactSize);
+
+
+
 
 const labels = Array.from({length: 30}, (_, i) => i + 1);
+
 const data = {
   labels: labelsSuccess,
   datasets: [{
@@ -108,10 +151,10 @@ const dataBuildDuration = {
 };
 
 const dataTimeSpentQueue = {
-  labels: labels,
+  labels: labelsB,
   datasets: [{
     label: 'Time Spent In Queue',
-    data: Array.from({length: 30}, () => Math.floor(Math.random() * 60)),
+    data: dictTimeQueue,
     borderColor: [
       'rgba(0, 180, 33, 1)',
     ],
@@ -132,10 +175,10 @@ const dataTestCount = {
   }]
 };
 const dataArtifactsSize = {
-  labels: labels,
+  labels: labelsArtifactSize,
   datasets: [{
     label: 'Artifacts Size',
-    data: Array.from({length: 30}, () => Math.floor(Math.random() * 60)),
+    data: dictArtifactSize,
     borderColor: [
       'rgba(0, 180, 33, 1)',
     ],

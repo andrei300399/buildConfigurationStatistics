@@ -86,6 +86,33 @@ public class DateTimeHandler {
         return dayDuration;
     }
 
+    public static HashMap<String, HashMap<String,Integer>> createDateWeekMapSuccessRate() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusWeeks(1);
+        LOGGER.log(Level.INFO, "dateTime - 1 week" + dateTime);
+        HashMap<String, HashMap<String,Integer>> successFailSuccess = new HashMap();
+        int lenWeek = 7;
+        LOGGER.log(Level.INFO, "lenWeek" + lenWeek);
+        for (int i = 1; i <= lenWeek; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            //get dateTime previous week + i = 1...7 day and getTime, after in strDate=2022-03-22
+            String strDate = dateFormat.format(
+                    Date.from(dateTime.plusDays(i).toInstant()).getTime());
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            successFailSuccess.put(strDate, new HashMap(){{
+                put("fail", 0);
+                put("success", 0);
+            }});
+        }
+        LOGGER.log(Level.INFO, "successFailSuccess: " + successFailSuccess.entrySet());
+        return successFailSuccess;
+    }
+    /**
+     * Create map format {23.12: {success: 0, fail : 0}, 24.12: {success: 0, fail : 0} ...}
+     * on 30-31 days
+     *
+     * **/
+
     public static HashMap<String, HashMap<String,Integer>> createDateMonthMapSuccessRate() {
         ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(1);
         LOGGER.log(Level.INFO, "dateTime" + dateTime);
@@ -106,6 +133,31 @@ public class DateTimeHandler {
         }
         LOGGER.log(Level.INFO, "successFailSuccess: " + successFailSuccess.entrySet());
         return successFailSuccess;
+    }
+
+    /**
+     * Create map format {23.12: 0, 24.12: 0 ...}
+     * on 30-31 days
+     *
+     * **/
+
+    public static HashMap<String, Integer> createDateMonthMapTestCount() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(1);
+        LOGGER.log(Level.INFO, "dateTime test count" + dateTime);
+        HashMap<String, Integer> testCount = new HashMap();
+        int lenMonth = getLastMonthDays();
+        LOGGER.log(Level.INFO, "lenMonth: " + lenMonth);
+        for (int i = 1; i <= lenMonth; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            //get dateTime previous month + i = 1...31 day and getTime, after in strDate=2022-03-22
+            String strDate = dateFormat.format(
+                    Date.from(dateTime.plusDays(i).toInstant()).getTime());
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            testCount.put(strDate, 0);
+        }
+        LOGGER.log(Level.INFO, "testCount: " + testCount.entrySet());
+        return testCount;
     }
 
     /**
@@ -135,6 +187,35 @@ public class DateTimeHandler {
         }
         LOGGER.log(Level.INFO, "monthDuration: " + monthDuration.entrySet());
         return monthDuration;
+    }
+
+    /**
+     * Create map format {1/2/2022: 0.0, 3/2/2022: 0.0 ...}
+     * on 1 week
+     *
+     * **/
+    public static HashMap<String, Double> createDateWeekMap() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusWeeks(1);
+        LOGGER.log(Level.INFO, "last week dateTime duration" + dateTime);
+        HashMap<String, Double> weekDuration = new HashMap<String, Double>();
+        int lengthWeek = 7; // any week length in days
+        LOGGER.log(Level.INFO, "lengthWeek: " + lengthWeek);
+        for (int i = 1; i <= lengthWeek; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            //get dateTime previous week + i = 1...7 and getTime, after in strDate=2022-03-01
+            String strDate = dateFormat.format(
+                    Date.from(
+                            dateTime.plusDays(i).toInstant()
+                    ).getTime()
+            );
+
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            weekDuration.put(strDate, 0.0);
+        }
+        LOGGER.log(Level.INFO, "weekDuration: " + weekDuration.entrySet());
+        return weekDuration;
     }
 
     public static HashMap<String, HashMap<String,Integer>> createDateYearMapSuccessRate() {
