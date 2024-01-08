@@ -1,9 +1,8 @@
 package io.jenkins.plugins.sample;
 
-import hudson.model.FreeStyleBuild;
-import hudson.model.FreeStyleProject;
-import hudson.model.Result;
+import hudson.model.*;
 import hudson.tasks.Shell;
+import hudson.util.RunList;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
@@ -150,7 +149,94 @@ public class BuildConfigurationStatisticsBuilderTest {
         }
     }
 
+    @Test
+    public void testGetTimeInQueue() throws Exception {
+        FreeStyleProject project = jenkins.createFreeStyleProject();
+        project.getBuildersList().add(new BuildConfigurationStatisticsBuilder());
+        jenkins.buildAndAssertSuccess(project);
+        Run run = project.getBuilds().getLastBuild();
+        long time = new TimeInQueueFetcher().getTimeInQueue(run);
+        long queuedTime = run.getStartTimeInMillis() - run.getTimeInMillis();
+        assert time == queuedTime;
+    }
 
+    @Test
+    public void testCreateDateYearMap()  {
+        HashMap<String, Double> dictDateYearZero = DateTimeHandler.createDateYearMap();
+        assert  dictDateYearZero.size() == 12;
+        assert  !dictDateYearZero.isEmpty();
+        for (Map.Entry<String, Double> entry : dictDateYearZero.entrySet()) {
+            assert entry.getValue() == 0.0;
+        }
+    }
 
+    @Test
+    public void testCreateDateWeekMap()  {
+        HashMap<String, Double> dictDateWeekZero = DateTimeHandler.createDateWeekMap();
+        assert  dictDateWeekZero.size() == 7;
+        assert  !dictDateWeekZero.isEmpty();
+        for (Map.Entry<String, Double> entry : dictDateWeekZero.entrySet()) {
+            assert entry.getValue() == 0.0;
+        }
+    }
 
+    @Test
+    public void testCreateDateYearMapSuccessRate()  {
+        HashMap<String, HashMap<String, Integer>> dictDateYearZero = DateTimeHandler.createDateYearMapSuccessRate();
+        assert  dictDateYearZero.size() == 12;
+        assert  !dictDateYearZero.isEmpty();
+        for (Map.Entry<String, HashMap<String, Integer>> entry : dictDateYearZero.entrySet()) {
+            assert entry.getValue().equals(new HashMap(){{
+                put("fail", 0);
+                put("success", 0);
+            }});
+        }
+    }
+
+    @Test
+    public void testFilterPeriodBuild() throws Exception {
+        FreeStyleProject project = jenkins.createFreeStyleProject();
+        project.getBuildersList().add(new BuildConfigurationStatisticsBuilder());
+        jenkins.buildAndAssertSuccess(project);
+        jenkins.buildAndAssertSuccess(project);
+        List<Run> runList = new RunList<>(project);
+
+        BuildLogic instance1 = new BuildLogic(IntervalDate.WEEK, true, (RunList<Run>) runList);
+        instance1.filterPeriodBuild();
+
+        assert  instance1.buildList.size() == 2;
+
+        BuildLogic instance2 = new BuildLogic(IntervalDate.ALL, true, (RunList<Run>) runList);
+        instance2.filterPeriodBuild();
+
+        assert  instance2.buildList.size() == 2;
+
+        BuildLogic instance3 = new BuildLogic(IntervalDate.MONTH, true, (RunList<Run>) runList);
+        instance3.filterPeriodBuild();
+
+        assert  instance3.buildList.size() == 2;
+
+        BuildLogic instance4 = new BuildLogic(IntervalDate.YEAR, true, (RunList<Run>) runList);
+        instance4.filterPeriodBuild();
+
+        assert  instance4.buildList.size() == 2;
+    }
+    @Test
+    public void testFilterFailedBuild() throws Exception {
+        FreeStyleProject project = jenkins.createFreeStyleProject();
+        project.getBuildersList().add(new BuildConfigurationStatisticsBuilder());
+        jenkins.buildAndAssertSuccess(project);
+        project.getBuildersList().add(new Shell("echo1 hello"));
+        jenkins.buildAndAssertStatus(Result.FAILURE, project);
+        List<Run> runList = new RunList<>(project);
+        for (Run run :runList) {
+            System.out.println(run.getResult());
+        }
+
+        BuildLogic instance1 = new BuildLogic(IntervalDate.WEEK, false, (RunList<Run>) runList);
+        instance1.filterFailedBuild();
+
+        assert  instance1.buildList.size() == 1;
+        
+    }
 }
