@@ -60,7 +60,7 @@
 <!--                        </td>-->
 
                         <p class="period">WEEK</p>
-                        <j:forEach var="type" items="${it.getBuildDuration('WEEK', '1','0')}">
+                        <j:forEach var="type" items="${it.getBuildDuration('WEEK', '1','1')}">
                                 <p class="buildDuration">
                                         <span class="key">${type.key}</span>
                                         <span class="value">${type.value}</span>
@@ -72,13 +72,13 @@
                                         <span class="value">${successRate.value}</span>
                                 </p>
                         </j:forEach>
-                        <j:forEach var="timeQueue" items="${it.getBuildTimeQueue('WEEK', '0')}">
+                        <j:forEach var="timeQueue" items="${it.getBuildTimeQueue('WEEK', '1')}">
                                 <p class="timeQueue">
                                         <span class="key">${timeQueue.key}</span>
                                         <span class="value">${timeQueue.value}</span>
                                 </p>
                         </j:forEach>
-                        <j:forEach var="artifactSize" items="${it.getBuildArtifactSize('WEEK', '1','0')}">
+                        <j:forEach var="artifactSize" items="${it.getBuildArtifactSize('WEEK', '1','1')}">
                                 <p class="artifactSize">
                                         <span class="key">${artifactSize.key}</span>
                                         <span class="value">${artifactSize.value}</span>
