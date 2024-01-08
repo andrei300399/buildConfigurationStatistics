@@ -104,6 +104,9 @@
                                                         <option>Month</option>
                                                         <option>Day</option>
                                                         <option>Year</option>
+                                                        <option>Week</option>
+                                                        <option>Quarter</option>
+                                                        <option>All</option>
                                                 </select>
 
                                         </label>
@@ -122,6 +125,9 @@
                                                         <option>Month</option>
                                                         <option>Day</option>
                                                         <option>Year</option>
+                                                        <option>Week</option>
+                                                        <option>Quarter</option>
+                                                        <option>All</option>
                                                 </select>
                                                 </f:entry>
 
@@ -149,6 +155,9 @@
                                                         <option>Month</option>
                                                         <option>Day</option>
                                                         <option>Year</option>
+                                                        <option>Week</option>
+                                                        <option>Quarter</option>
+                                                        <option>All</option>
                                                 </select>
 
                                         </label>
@@ -170,6 +179,9 @@
                                                         <option>Month</option>
                                                         <option>Day</option>
                                                         <option>Year</option>
+                                                        <option>Week</option>
+                                                        <option>Quarter</option>
+                                                        <option>All</option>
                                                 </select>
 
                                         </label>
@@ -191,6 +203,9 @@
                                                         <option>Month</option>
                                                         <option>Day</option>
                                                         <option>Year</option>
+                                                        <option>Week</option>
+                                                        <option>Quarter</option>
+                                                        <option>All</option>
                                                 </select>
 
                                         </label>

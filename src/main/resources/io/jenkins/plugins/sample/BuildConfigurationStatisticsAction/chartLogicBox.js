@@ -11,6 +11,7 @@ switch(period) {
                        );
     break;
 
+    case 'QUARTER':
     case 'YEAR':
                  arrLabels.push(
 (dateFormat.getMonth()+1)+"/"+dateFormat.getFullYear()

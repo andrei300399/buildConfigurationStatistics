@@ -237,6 +237,27 @@ public class BuildConfigurationStatisticsBuilderTest {
         instance1.filterFailedBuild();
 
         assert  instance1.buildList.size() == 1;
-        
+
+    }
+
+    @Test
+    public void testCreateDateQuarterMap()  {
+        HashMap<String, Double> dictDateQuarterZero = DateTimeHandler.createDateQuarterMap();
+        assert  dictDateQuarterZero.size() == 4;
+        assert  !dictDateQuarterZero.isEmpty();
+        for (Map.Entry<String, Double> entry : dictDateQuarterZero.entrySet()) {
+            assert entry.getValue() == 0.0;
+        }
+    }
+
+    @Test
+    public void testCreateDateDayMap()  {
+        HashMap<String, Double> dictDateDayZero = DateTimeHandler.createDateDayMap();
+        assert  dictDateDayZero.size() == 24;
+        assert  !dictDateDayZero.isEmpty();
+        for (Map.Entry<String, Double> entry : dictDateDayZero.entrySet()) {
+            System.out.println(entry.getKey());
+            assert entry.getValue() == 0.0;
+        }
     }
 }

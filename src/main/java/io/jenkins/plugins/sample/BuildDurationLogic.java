@@ -39,6 +39,18 @@ public class BuildDurationLogic extends BuildLogic {
                 dateFormatDuration = DateTimeHandler.createDateYearMap();
                 dateFormatKey = "yyyy-MM";
                 break;
+            case QUARTER:
+                dateFormatDuration = DateTimeHandler.createDateQuarterMap();
+                dateFormatKey = "yyyy-MM";
+                break;
+            case DAY:
+                dateFormatDuration = DateTimeHandler.createDateDayMap();
+                dateFormatKey = "yyyy-MM-dd HH";
+                break;
+            case ALL:
+                dateFormatDuration = DateTimeHandler.createDateYearMap();
+                dateFormatKey = "yyyy-MM";
+                break;
         }
 
 

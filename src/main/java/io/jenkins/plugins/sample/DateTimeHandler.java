@@ -86,6 +86,31 @@ public class DateTimeHandler {
         return dayDuration;
     }
 
+    /**
+     * Create map format {1:00:00 0.0, 2:00:00: 0.0 ...}
+     * on 24 hours
+     *
+     * **/
+    public static HashMap<String, Double> createDateDayMap() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusHours(24);
+        Logger LOGGER;
+        LOGGER = Logger.getLogger(DateTimeHandler.class.getName());
+        LOGGER.log(Level.INFO, "dateTime days" + dateTime);
+        HashMap<String, Double> hourDuration = new HashMap<String, Double>();
+        int lenDay = 24;
+        LOGGER.log(Level.INFO, "lenDay: " + lenDay);
+        for (int i = 1; i <= lenDay; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH");
+            String strDate = dateFormat.format(
+                    Date.from(dateTime.plusHours(i).toInstant()).getTime());
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            hourDuration.put(strDate, 0.0);
+        }
+        LOGGER.log(Level.INFO, "hourDuration: " + hourDuration.entrySet());
+        return hourDuration;
+    }
+
     public static HashMap<String, HashMap<String,Integer>> createDateWeekMapSuccessRate() {
         ZonedDateTime dateTime = ZonedDateTime.now().minusWeeks(1);
         LOGGER.log(Level.INFO, "dateTime - 1 week" + dateTime);
@@ -187,6 +212,35 @@ public class DateTimeHandler {
         }
         LOGGER.log(Level.INFO, "monthDuration: " + monthDuration.entrySet());
         return monthDuration;
+    }
+
+    /**
+     * Create map format {2/2022: 0.0, 3/2022: 0.0 ...}
+     * on 3 month
+     *
+     * **/
+    public static HashMap<String, Double> createDateQuarterMap() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(3);
+        LOGGER.log(Level.INFO, "last quarter dateTime" + dateTime);
+        HashMap<String, Double> quarterDuration = new HashMap<String, Double>();
+        int lengthQuarter = 4; // any year length in month
+        LOGGER.log(Level.INFO, "lengthQuarter: " + lengthQuarter);
+        for (int i = 1; i <= lengthQuarter; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+
+            //get dateTime previous year + i = 1...3 and getTime, after in strDate=2022-03
+            String strDate = dateFormat.format(
+                    Date.from(
+                            dateTime.plusMonths(i).toInstant()
+                    ).getTime()
+            );
+
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            quarterDuration.put(strDate, 0.0);
+        }
+        LOGGER.log(Level.INFO, "quarterDuration: " + quarterDuration.entrySet());
+        return quarterDuration;
     }
 
     /**
