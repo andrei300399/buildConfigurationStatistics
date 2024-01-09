@@ -1,5 +1,6 @@
 package io.jenkins.plugins.sample;
 
+import com.google.gson.Gson;
 import hudson.model.Action;
 import hudson.model.Job;
 import jenkins.security.stapler.StaplerDispatchable;
@@ -15,11 +16,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class BuildConfigurationStatisticsAction implements Action {
 
 
 
     private Job job;
+    private String str = "asd";
 
     public BuildConfigurationStatisticsAction(Job job) {
         this.job = job;
@@ -44,7 +47,12 @@ public class BuildConfigurationStatisticsAction implements Action {
         return job;
     }
 
-    public Map<String, Double> getBuildDuration(String period, String fail, String average) throws ParseException {
+    public String getStr() {
+        return str;
+    }
+
+    @JavaScriptMethod
+    public String getBuildDuration(String period, String fail, String average) throws ParseException {
         Logger LOGGER = Logger.getLogger("uuu");
         LOGGER.log(Level.INFO, "arg jelly: " + period);
         LOGGER.log(Level.INFO, "failed status: " + fail);
@@ -52,7 +60,12 @@ public class BuildConfigurationStatisticsAction implements Action {
         IntervalDate intreval = IntervalDate.valueOf(period);
         Boolean failed = fail.equals("1");
         Boolean averageTime = average.equals("1");
-        return new BuildDurationLogic(intreval, failed,job.getBuilds()).getBuildsDuration(averageTime);
+        Gson gson = new Gson();
+        Map<String, Double> map = new BuildDurationLogic(intreval, failed,job.getBuilds()).getBuildsDuration(averageTime);
+         String gsonData = gson.toJson(map);
+        LOGGER.log(Level.INFO, "gson: " + gsonData);
+        return gsonData;
+        //return new BuildDurationLogic(intreval, failed,job.getBuilds()).getBuildsDuration(averageTime);
     }
 
     public Map<String, Double> getBuildSuccessRate(String period) throws ParseException {
@@ -79,6 +92,7 @@ public class BuildConfigurationStatisticsAction implements Action {
         LOGGER.log(Level.INFO, "failed TestCount: " + fail);
         IntervalDate intreval = IntervalDate.valueOf(period);
         Boolean failed = fail.equals("1");
+
         return new BuildTestCountLogic(intreval, job.getBuilds()).getTestCount();
     }
 
@@ -93,7 +107,11 @@ public class BuildConfigurationStatisticsAction implements Action {
     // methods for js -> jelly -> java communication
     @JavaScriptMethod
     public int add(int x, int y) {
+        this.str = "MONTH";
+        Logger LOGGER = Logger.getLogger("uuu22312");
+        LOGGER.log(Level.WARNING, "js test" + this.str);
         return x+y;
+
     }
 
         @JavaScriptMethod
@@ -118,5 +136,11 @@ public class BuildConfigurationStatisticsAction implements Action {
     public void doMark(StaplerRequest req, StaplerResponse res) throws IOException {
         Logger LOGGER = Logger.getLogger("uuu3");
         LOGGER.log(Level.WARNING, "js stepler");
+    }
+
+    @JavaScriptMethod
+    public void marker(String str1) {
+        Logger LOGGER = Logger.getLogger("uuu1222");
+        LOGGER.log(Level.INFO, "set vat: " + this.str);
     }
 }

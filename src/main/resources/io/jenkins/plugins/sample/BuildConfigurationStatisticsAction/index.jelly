@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler" xmlns:f="/lib/form">
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler" xmlns:f="/lib/form" xmlns:g="glide">
         <head>
                 <style>
                         .buildDuration, .period,
@@ -46,45 +46,71 @@
                 <l:main-panel>
 
                         <h1>Statistics for job ${it.job.name}</h1>
-                        <div id="msg" />
-<!--                        <script>-->
-<!--                                var foo = <st:bind value="${it}"/>-->
 
-<!--                                foo.add(1,5, function(t) {-->
-<!--                                document.getElementById('msg').innerHTML = t.responseObject();-->
-<!--                                })-->
-<!--                        </script>-->
 
-<!--                        <td>-->
-<!--                                <f:checkbox name="selected" onclick="myItem.mark('${it.job.fullName}')" />-->
-<!--                        </td>-->
 
-                        <p class="period">WEEK</p>
-                        <j:forEach var="type" items="${it.getBuildDuration('WEEK', '1','1')}">
+                        <j:set var="value1" value="WEEK"/>
+
+
+
+                        <div id="msg" >${it.str}</div>
+                        <div id="msg2" >${it.str}</div>
+
+                        <st:bind var="myItem" value="${it}"/>
+
+                        <script id="script1">
+
+
+                                var foo = <st:bind value="${it}"/>
+                                foo.add(1,5, function(t) {
+                                document.getElementById('msg').innerHTML = t.responseObject();
+                                });
+                                foo.getBuildDuration('MONTH', '1','1', function(t) {
+                                document.getElementById('msg').innerHTML = t.responseObject();
+                                });
+                                function myCheck(){
+                                var str = document.getElementById('selected').checked ?  '1' : '0';
+                                foo.getBuildDuration('MONTH', str,'1', function(t) {
+                                document.getElementById('msg').innerHTML = t.responseObject();
+                                });
+                                }
+<!--                                <j:set var="value1" value="MONTH"/>-->
+<!--                                <j:forEach var="type" items="${it.getBuildDuration(value1, '1','1')}">-->
+<!--                                        document.getElementById('ll').innerText = ${type.key};-->
+<!--                                </j:forEach>-->
+
+
+                        </script>
+                        <td>
+                                <input type="checkbox" id="selected" onclick="myCheck()"  />
+                        </td>
+                        <p class="period">${value1}</p>
+
+                        <j:forEach var="type" items="${it.getBuildDuration(value1, '1','1')}">
                                 <p class="buildDuration">
                                         <span class="key">${type.key}</span>
                                         <span class="value">${type.value}</span>
                                 </p>
                         </j:forEach>
-                        <j:forEach var="successRate" items="${it.getBuildSuccessRate('WEEK')}">
+                        <j:forEach var="successRate" items="${it.getBuildSuccessRate(value1)}">
                                 <p class="successRate">
                                         <span class="key">${successRate.key}</span>
                                         <span class="value">${successRate.value}</span>
                                 </p>
                         </j:forEach>
-                        <j:forEach var="timeQueue" items="${it.getBuildTimeQueue('WEEK', '1')}">
+                        <j:forEach var="timeQueue" items="${it.getBuildTimeQueue(value1, '1')}">
                                 <p class="timeQueue">
                                         <span class="key">${timeQueue.key}</span>
                                         <span class="value">${timeQueue.value}</span>
                                 </p>
                         </j:forEach>
-                        <j:forEach var="artifactSize" items="${it.getBuildArtifactSize('WEEK', '1','1')}">
+                        <j:forEach var="artifactSize" items="${it.getBuildArtifactSize(value1, '1','1')}">
                                 <p class="artifactSize">
                                         <span class="key">${artifactSize.key}</span>
                                         <span class="value">${artifactSize.value}</span>
                                 </p>
                         </j:forEach>
-                        <j:forEach var="testCount" items="${it.getBuildTestCount('WEEK', '1')}">
+                        <j:forEach var="testCount" items="${it.getBuildTestCount(value1, '1')}">
                                 <p class="testCount">
                                         <span class="key">${testCount.key}</span>
                                         <span class="value">${testCount.value}</span>
@@ -223,7 +249,7 @@
                         </div>
 
                 </l:main-panel>
-                <st:bind var="myItem" value="${it}"/>
+                <p id="ll"></p>
         </l:layout>
         <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.declareChartJsClickArray"/>
         <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.chartLogicBox"/>

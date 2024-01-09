@@ -1,3 +1,5 @@
+var scr1 = document.getElementById("script1");
+console.log("ddddd", scr1);
 
 
 function formatLabelsDate(arrLabels, dateFormat, period) {
@@ -234,6 +236,10 @@ perfChartJsCharts["buildDurationChart"] = new Chart(ctxBuild, settingsBuildDurat
 perfChartJsCharts["timeSpentQueue"] = new Chart(ctxTimeSpentQueue, settingsTimeSpentQueue);
 perfChartJsCharts["testCount"] = new Chart(ctxTestCount, settingsTestCount);
 perfChartJsCharts["artifactsSize"] = new Chart(ctxArtifactsSize, settingsArtifactsSize);
+
+
+
+
 
 
 
