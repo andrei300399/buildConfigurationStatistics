@@ -67,12 +67,16 @@ public class BuildConfigurationStatisticsAction implements Action {
         return gsonData;
         //return new BuildDurationLogic(intreval, failed,job.getBuilds()).getBuildsDuration(averageTime);
     }
-
-    public Map<String, Double> getBuildSuccessRate(String period) throws ParseException {
+    @JavaScriptMethod
+    public String getBuildSuccessRate(String period) throws ParseException {
         Logger LOGGER = Logger.getLogger("uuu1");
         LOGGER.log(Level.INFO, "arg jelly period success: " + period);
         IntervalDate intreval = IntervalDate.valueOf(period);
-        return new BuildSuccessRateLogic(intreval, job.getBuilds()).getSuccessRate();
+        Gson gson = new Gson();
+        Map<String, Double> map = new BuildSuccessRateLogic(intreval,job.getBuilds()).getSuccessRate();
+        String gsonData = gson.toJson(map);
+        LOGGER.log(Level.INFO, "gson: " + gsonData);
+        return gsonData;
     }
 
     public Map<String, Double> getBuildArtifactSize(String period, String fail, String average) throws ParseException {

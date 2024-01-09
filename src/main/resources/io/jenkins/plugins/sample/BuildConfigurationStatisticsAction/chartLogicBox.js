@@ -29,14 +29,17 @@ function sortOnKeys(dict) {
 
     var sorted = [];
     for(var key in dict) {
+        console.log("key", key);
         sorted[sorted.length] = key;
+        console.log("sorted", sorted);
     }
     sorted.sort();
-
+    console.log("sorted2", sorted);
     var dataBuildDurationValues = [];
     var labelsB = [];
     for(var i = 0; i < sorted.length; i++) {
        dataBuildDurationValues.push(dict[sorted[i]]);
+       console.log("dataBuildDurationValues", dataBuildDurationValues, dict[sorted[i]]);
        var dateFormat= new Date(parseInt(sorted[i]));
        console.log("dateFormat", dateFormat);
        var period = document.querySelector(".period").textContent;
@@ -64,6 +67,77 @@ console.log("build duration dict values",dict);
 
 // build Duration create chart settings
 var successRate = document.querySelectorAll(".successRate");
+
+var successRateSelect = document.querySelector("#selectSuccess");
+function pausecomp(millis)
+{
+    var date = new Date();
+    var curDate = null;
+    do { curDate = new Date(); }
+    while(curDate-date < millis);
+}
+//successRateSelect.addEventListener("change", (e) => {
+function pausecomp222(){
+//pausecomp(3000);
+var successRate2 = document.querySelector("#msg").textContent;
+  console.log(successRate2);
+  var obj = JSON.parse(successRate2);
+  console.log("json", obj);
+
+  var dataSuccessRateValues = [];
+  var dataSuccessRateDict = {};
+console.log(obj.count);
+   for (var key in obj){
+  console.log("111", key);
+
+//      dataSuccessRateDict[Date.parse(successRate[i].querySelector('.key').textContent)]
+//          = parseFloat(successRate[i].querySelector('.value').textContent);
+
+dataSuccessRateDict[Date.parse(key)] = parseFloat(obj[key]);
+  }
+  console.log("dataSuccessRateDict: ", dataSuccessRateDict);
+
+  dictSuccess = sortOnKeys(dataSuccessRateDict)[0];
+  labelsSuccess = sortOnKeys(dataSuccessRateDict)[1];
+
+  const data = {
+    labels: labelsSuccess,
+    datasets: [{
+      label: 'Success rate',
+      data: dictSuccess,
+      backgroundColor: [
+        'rgba(0, 255, 0, 0.5)',
+      ],
+      borderColor: [
+        'rgb(0, 69, 36)',
+      ],
+      categoryPercentage: 1,
+      borderWidth: 1,
+      barPercentage: 1,
+    }]
+  };
+  var allPerf = {
+                          type: 'bar',
+                          data: data,
+                          options: {
+                              scales: {
+                                    y: {
+                                      beginAtZero: true
+                                    }
+                                  }
+                          }
+                        };
+
+  if (perfChartJsCharts["successRateChart"]) perfChartJsCharts["successRateChart"].destroy();
+  perfChartJsCharts["successRateChart"] = new Chart(ctx, allPerf);
+
+
+//});
+}
+
+
+
+
 
 var dataSuccessRateValues = [];
 var dataSuccessRateDict = {};

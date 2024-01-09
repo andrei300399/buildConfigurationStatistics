@@ -74,6 +74,21 @@
                                 document.getElementById('msg').innerHTML = t.responseObject();
                                 });
                                 }
+
+                                function myCheckSuccess(){
+                                var strPeriod = document.getElementById("selectSuccess").value;
+                                //var strPeriod = document.getElementById('selected').checked ?  '1' : '0';
+                                //alert(strPeriod);
+                                //var strStrPeriod = strPeriod.toString
+                                console.log(strPeriod, "Day");
+                                foo.getBuildSuccessRate(strPeriod, function(t) {
+                                document.getElementById('msg').innerHTML = t.responseObject();
+                                pausecomp222();
+                                });
+
+                                }
+
+
 <!--                                <j:set var="value1" value="MONTH"/>-->
 <!--                                <j:forEach var="type" items="${it.getBuildDuration(value1, '1','1')}">-->
 <!--                                        document.getElementById('ll').innerText = ${type.key};-->
@@ -126,13 +141,13 @@
                                 <form class="settings">
                                         <label>
                                                 Range:
-                                                <select>
-                                                        <option>Month</option>
-                                                        <option>Day</option>
-                                                        <option>Year</option>
-                                                        <option>Week</option>
-                                                        <option>Quarter</option>
-                                                        <option>All</option>
+                                                <select id="selectSuccess" onchange="myCheckSuccess()">
+                                                        <option value="MONTH">Month</option>
+                                                        <option value="DAY">Day</option>
+                                                        <option value="YEAR">Year</option>
+                                                        <option value="WEEK">Week</option>
+                                                        <option value="QUARTER">Quarter</option>
+                                                        <option value="ALL">All</option>
                                                 </select>
 
                                         </label>
