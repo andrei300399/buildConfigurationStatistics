@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import hudson.tasks.junit.TestResultAction;
 
 public class BuildTestCountLogic extends BuildLogic {
 

@@ -1,10 +1,12 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler" xmlns:f="/lib/form" xmlns:g="glide">
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler" xmlns:f="/lib/form">
         <head>
                 <style>
                         .buildDuration, .period,
                         .successRate, .timeQueue,
-                        .artifactSize, .testCount{
+                        .artifactSize, .testCount, #successRateData, #buildDurationData,
+                        #testCountData, #artifactSizeData, #timeQueueData
+                        {
                                 display:none;
                         }
                         .graph-container {
@@ -53,52 +55,89 @@
 
 
 
-                        <div id="msg" >${it.str}</div>
-                        <div id="msg2" >${it.str}</div>
+                        <div id="successRateData" >${it.str}</div>
+                        <div id="buildDurationData" >${it.str}</div>
+                        <div id="artifactSizeData" >${it.str}</div>
+                        <div id="testCountData" >${it.str}</div>
+                        <div id="timeQueueData" >${it.str}</div>
 
                         <st:bind var="myItem" value="${it}"/>
 
                         <script id="script1">
 
+                                var myObjectBuild = <st:bind value="${it}"/>
 
-                                var foo = <st:bind value="${it}"/>
-                                foo.add(1,5, function(t) {
-                                document.getElementById('msg').innerHTML = t.responseObject();
+                                myObjectBuild.getBuildSuccessRate('MONTH', function(t) {
+                                document.getElementById('successRateData').innerHTML = t.responseObject();
+                                createSuccessRateChart('MONTH');
                                 });
-                                foo.getBuildDuration('MONTH', '1','1', function(t) {
-                                document.getElementById('msg').innerHTML = t.responseObject();
-                                });
-                                function myCheck(){
-                                var str = document.getElementById('selected').checked ?  '1' : '0';
-                                foo.getBuildDuration('MONTH', str,'1', function(t) {
-                                document.getElementById('msg').innerHTML = t.responseObject();
-                                });
-                                }
-
                                 function myCheckSuccess(){
                                 var strPeriod = document.getElementById("selectSuccess").value;
-                                //var strPeriod = document.getElementById('selected').checked ?  '1' : '0';
-                                //alert(strPeriod);
-                                //var strStrPeriod = strPeriod.toString
                                 console.log(strPeriod, "Day");
-                                foo.getBuildSuccessRate(strPeriod, function(t) {
-                                document.getElementById('msg').innerHTML = t.responseObject();
-                                pausecomp222();
+                                myObjectBuild.getBuildSuccessRate(strPeriod, function(t) {
+                                document.getElementById('successRateData').innerHTML = t.responseObject();
+                                createSuccessRateChart(strPeriod);
                                 });
 
                                 }
 
 
-<!--                                <j:set var="value1" value="MONTH"/>-->
-<!--                                <j:forEach var="type" items="${it.getBuildDuration(value1, '1','1')}">-->
-<!--                                        document.getElementById('ll').innerText = ${type.key};-->
-<!--                                </j:forEach>-->
+                                myObjectBuild.getBuildDuration('MONTH', '0', '0', function(t) {
+                                document.getElementById('buildDurationData').innerHTML = t.responseObject();
+                                createBuildDurationChart('MONTH');
+                                });
+                                function myCheckBuildDuration(){
+                                var strPeriod = document.getElementById("selectBuildDuration").value;
+                                var checkAverage = document.getElementById('checkboxAverageBuildDuration').checked ?  '1' : '0';
+                                var checkFailed = document.getElementById('checkboxFailedBuildDuration').checked ?  '1' : '0';
+
+                                console.log(strPeriod, "strPeriod buildDuration");
+                                myObjectBuild.getBuildDuration(strPeriod, checkFailed, checkAverage, function(t) {
+                                document.getElementById('buildDurationData').innerHTML = t.responseObject();
+                                createBuildDurationChart(strPeriod);
+                                });
+
+                                }
+
+
+                                myObjectBuild.getBuildArtifactSize('MONTH', '0', '0', function(t) {
+                                document.getElementById('artifactSizeData').innerHTML = t.responseObject();
+                                createArtifactSizeChart('MONTH');
+                                });
+                                function myCheckArtifactsSize(){
+                                var strPeriod = document.getElementById("selectArtifactsSize").value;
+                                var checkAverage = document.getElementById('checkboxAverageArtifactsSize').checked ?  '1' : '0';
+                                var checkFailed = document.getElementById('checkboxFailedArtifactsSize').checked ?  '1' : '0';
+
+                                console.log(strPeriod, "strPeriod ArtifactSize");
+                                myObjectBuild.getBuildArtifactSize(strPeriod, checkFailed, checkAverage, function(t) {
+                                document.getElementById('artifactSizeData').innerHTML = t.responseObject();
+                                createArtifactSizeChart(strPeriod);
+                                });
+
+                                }
+
+
+                                myObjectBuild.getBuildTimeQueue('MONTH', '0', function(t) {
+                                document.getElementById('timeQueueData').innerHTML = t.responseObject();
+                                createTimeQueueChart('MONTH');
+                                });
+                                function myCheckTimeQueue(){
+                                var strPeriod = document.getElementById("selectTimeQueue").value;
+                                var checkAverage = document.getElementById('checkboxAverageTimeQueue').checked ?  '1' : '0';
+
+                                console.log(strPeriod, "strPeriod TimeQueue");
+                                myObjectBuild.getBuildTimeQueue(strPeriod, checkAverage, function(t) {
+                                document.getElementById('timeQueueData').innerHTML = t.responseObject();
+                                createTimeQueueChart(strPeriod);
+                                });
+
+                                }
+
 
 
                         </script>
-                        <td>
-                                <input type="checkbox" id="selected" onclick="myCheck()"  />
-                        </td>
+
                         <p class="period">${value1}</p>
 
                         <j:forEach var="type" items="${it.getBuildDuration(value1, '1','1')}">
@@ -161,26 +200,25 @@
                                 <form class="settings">
                                         <label>
                                                 Range:
-                                                <f:entry title="My Plugin Action">
-                                                <select>
-                                                        <option>Month</option>
-                                                        <option>Day</option>
-                                                        <option>Year</option>
-                                                        <option>Week</option>
-                                                        <option>Quarter</option>
-                                                        <option>All</option>
+                                                <select id="selectBuildDuration" onchange="myCheckBuildDuration()">
+                                                        <option value="MONTH">Month</option>
+                                                        <option value="DAY">Day</option>
+                                                        <option value="YEAR">Year</option>
+                                                        <option value="WEEK">Week</option>
+                                                        <option value="QUARTER">Quarter</option>
+                                                        <option value="ALL">All</option>
                                                 </select>
-                                                </f:entry>
+
 
 
                                         </label>
                                         <label>
                                         Average:
-                                        <input type="checkbox"/>
+                                        <input type="checkbox" id="checkboxAverageBuildDuration" onchange="myCheckBuildDuration()"/>
                                         </label>
                                         <label>
                                                 Show failed:
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" id="checkboxFailedBuildDuration" onchange="myCheckBuildDuration()"/>
                                         </label>
 
                                 </form>
@@ -192,19 +230,19 @@
                                 <form class="settings">
                                         <label>
                                                 Range:
-                                                <select>
-                                                        <option>Month</option>
-                                                        <option>Day</option>
-                                                        <option>Year</option>
-                                                        <option>Week</option>
-                                                        <option>Quarter</option>
-                                                        <option>All</option>
+                                                <select id="selectTimeQueue" onchange="myCheckTimeQueue()">
+                                                        <option value="MONTH">Month</option>
+                                                        <option value="DAY">Day</option>
+                                                        <option value="YEAR">Year</option>
+                                                        <option value="WEEK">Week</option>
+                                                        <option value="QUARTER">Quarter</option>
+                                                        <option value="ALL">All</option>
                                                 </select>
 
                                         </label>
                                         <label>
                                                 Average:
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" id="checkboxAverageTimeQueue" onchange="myCheckTimeQueue()"/>
                                         </label>
 
                                 </form>
@@ -217,12 +255,12 @@
                                         <label>
                                                 Range:
                                                 <select>
-                                                        <option>Month</option>
-                                                        <option>Day</option>
-                                                        <option>Year</option>
-                                                        <option>Week</option>
-                                                        <option>Quarter</option>
-                                                        <option>All</option>
+                                                        <option value="MONTH">Month</option>
+                                                        <option value="DAY">Day</option>
+                                                        <option value="YEAR">Year</option>
+                                                        <option value="WEEK">Week</option>
+                                                        <option value="QUARTER">Quarter</option>
+                                                        <option value="ALL">All</option>
                                                 </select>
 
                                         </label>
@@ -240,23 +278,23 @@
                                 <form class="settings">
                                         <label>
                                                 Range:
-                                                <select>
-                                                        <option>Month</option>
-                                                        <option>Day</option>
-                                                        <option>Year</option>
-                                                        <option>Week</option>
-                                                        <option>Quarter</option>
-                                                        <option>All</option>
+                                                <select id="selectArtifactsSize" onchange="myCheckArtifactsSize()">
+                                                        <option value="MONTH">Month</option>
+                                                        <option value="DAY">Day</option>
+                                                        <option value="YEAR">Year</option>
+                                                        <option value="WEEK">Week</option>
+                                                        <option value="QUARTER">Quarter</option>
+                                                        <option value="ALL">All</option>
                                                 </select>
 
                                         </label>
                                         <label>
                                                 Average:
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" id="checkboxAverageArtifactsSize" onchange="myCheckArtifactsSize()"/>
                                         </label>
                                         <label>
                                                 Show failed:
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" id="checkboxFailedArtifactsSize" onchange="myCheckArtifactsSize()"/>
                                         </label>
 
                                 </form>

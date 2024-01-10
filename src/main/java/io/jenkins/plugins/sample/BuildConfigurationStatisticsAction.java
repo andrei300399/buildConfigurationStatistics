@@ -65,7 +65,6 @@ public class BuildConfigurationStatisticsAction implements Action {
          String gsonData = gson.toJson(map);
         LOGGER.log(Level.INFO, "gson: " + gsonData);
         return gsonData;
-        //return new BuildDurationLogic(intreval, failed,job.getBuilds()).getBuildsDuration(averageTime);
     }
     @JavaScriptMethod
     public String getBuildSuccessRate(String period) throws ParseException {
@@ -79,7 +78,8 @@ public class BuildConfigurationStatisticsAction implements Action {
         return gsonData;
     }
 
-    public Map<String, Double> getBuildArtifactSize(String period, String fail, String average) throws ParseException {
+    @JavaScriptMethod
+    public String getBuildArtifactSize(String period, String fail, String average) throws ParseException {
         Logger LOGGER = Logger.getLogger("artifact");
         LOGGER.log(Level.INFO, "arg jelly artifact: " + period);
         LOGGER.log(Level.INFO, "failed artifact: " + fail);
@@ -87,9 +87,15 @@ public class BuildConfigurationStatisticsAction implements Action {
         IntervalDate intreval = IntervalDate.valueOf(period);
         Boolean failed = fail.equals("1");
         Boolean averageTime = average.equals("1");
-        return new BuildArtifactSizeLogic(intreval, failed, job.getBuilds()).getArtifactSize(averageTime);
+
+        Gson gson = new Gson();
+        Map<String, Double> map = new BuildArtifactSizeLogic(intreval, failed, job.getBuilds()).getArtifactSize(averageTime);
+        String gsonData = gson.toJson(map);
+        LOGGER.log(Level.INFO, "gson artifact: " + gsonData);
+        return gsonData;
     }
 
+    @JavaScriptMethod
     public Map<String, Integer> getBuildTestCount(String period, String fail) throws ParseException {
         Logger LOGGER = Logger.getLogger("TestCount");
         LOGGER.log(Level.INFO, "arg jelly TestCount: " + period);
@@ -100,51 +106,19 @@ public class BuildConfigurationStatisticsAction implements Action {
         return new BuildTestCountLogic(intreval, job.getBuilds()).getTestCount();
     }
 
-    public Map<String, Double> getBuildTimeQueue(String period, String average) throws ParseException {
+    @JavaScriptMethod
+    public String getBuildTimeQueue(String period, String average) throws ParseException {
         Logger LOGGER = Logger.getLogger("queue");
         LOGGER.log(Level.INFO, "arg jelly queue: " + period);
         LOGGER.log(Level.INFO, "avg queue: " + average);
         IntervalDate intreval = IntervalDate.valueOf(period);
         Boolean averageTime = average.equals("1");
-        return new BuildTimeQueueLogic(intreval, job.getBuilds()).getTimeQueue(averageTime);
-    }
-    // methods for js -> jelly -> java communication
-    @JavaScriptMethod
-    public int add(int x, int y) {
-        this.str = "MONTH";
-        Logger LOGGER = Logger.getLogger("uuu22312");
-        LOGGER.log(Level.WARNING, "js test" + this.str);
-        return x+y;
 
-    }
+        Gson gson = new Gson();
+        Map<String, Double> map = new BuildTimeQueueLogic(intreval, job.getBuilds()).getTimeQueue(averageTime);
+        String gsonData = gson.toJson(map);
+        LOGGER.log(Level.INFO, "gson TimeQueue: " + gsonData);
+        return gsonData;
 
-        @JavaScriptMethod
-        public Map<String, Double> buildto(String job1) throws ParseException {
-            return new BuildDurationLogic(IntervalDate.YEAR, true, job.getBuilds()).getBuildsDuration(false);
-        }
-        public void doAction(StaplerRequest request, StaplerResponse response) throws IOException, ServletException,
-     ParseException {
-            IntervalDate intervalDate = IntervalDate.valueOf(request.getParameter("IntervalDate"));
-            BuildConfigurationStatisticsAction myPluginAction = new BuildConfigurationStatisticsAction(job);
-            myPluginAction.getBuildDuration("MONTH", "1", "0");
-            response.sendRedirect2(request.getContextPath() + "/jenkins");
-        }
-    @JavaScriptMethod
-    @RequirePOST
-    public void mark(String job) {
-        Logger LOGGER = Logger.getLogger("uuu2");
-        LOGGER.log(Level.WARNING, "js test");
-    }
-
-    @StaplerDispatchable
-    public void doMark(StaplerRequest req, StaplerResponse res) throws IOException {
-        Logger LOGGER = Logger.getLogger("uuu3");
-        LOGGER.log(Level.WARNING, "js stepler");
-    }
-
-    @JavaScriptMethod
-    public void marker(String str1) {
-        Logger LOGGER = Logger.getLogger("uuu1222");
-        LOGGER.log(Level.INFO, "set vat: " + this.str);
     }
 }

@@ -1,6 +1,28 @@
-var scr1 = document.getElementById("script1");
-console.log("ddddd", scr1);
+//var scr1 = document.getElementById("script1");
+//console.log("ddddd", scr1);
+const labels = Array.from({length: 30}, (_, i) => i + 1);
+const dataTestCount = {
+  labels: labels,
+  datasets: [{
+    label: 'Test Count',
+    data: Array.from({length: 30}, () => Math.floor(Math.random() * 60)),
+    borderColor: [
+      'rgba(0, 180, 33, 1)',
+    ],
+    tension: 0.1
 
+  }]
+};
+var settingsTestCount = {
+                        type: 'line',
+                        data: dataTestCount,
+                      };
+var ctx = document.getElementById("successRateChart").getContext("2d");
+var ctxBuild = document.getElementById("buildDurationChart").getContext("2d");
+var ctxArtifactsSize = document.getElementById("artifactsSize").getContext("2d");
+var ctxTimeSpentQueue = document.getElementById("timeSpentQueue").getContext("2d");
+var ctxTestCount = document.getElementById("testCount").getContext("2d");
+perfChartJsCharts["testCount"] = new Chart(ctxTestCount, settingsTestCount);
 
 function formatLabelsDate(arrLabels, dateFormat, period) {
 switch(period) {
@@ -18,14 +40,16 @@ switch(period) {
                  arrLabels.push(
 (dateFormat.getMonth()+1)+"/"+dateFormat.getFullYear()
                        );
+
     break;
 
 }
+console.log("arrLabels", arrLabels);
 }
 
 
 
-function sortOnKeys(dict) {
+function sortOnKeys(dict, period) {
 
     var sorted = [];
     for(var key in dict) {
@@ -42,44 +66,21 @@ function sortOnKeys(dict) {
        console.log("dataBuildDurationValues", dataBuildDurationValues, dict[sorted[i]]);
        var dateFormat= new Date(parseInt(sorted[i]));
        console.log("dateFormat", dateFormat);
-       var period = document.querySelector(".period").textContent;
+       //var period = document.querySelector(".period").textContent;
+       console.log("period", period)
        formatLabelsDate(labelsB, dateFormat, period);
+       console.log("labelsB", labelsB);
     }
     return [dataBuildDurationValues, labelsB];
 }
-// build Duration create chart settings
-var buildDuration = document.querySelectorAll(".buildDuration");
 
-var dataBuildDurationValues = [];
-var dataBuildDurationDict = {};
-
-for (var i=0; i<buildDuration.length; i++){
-
-    dataBuildDurationDict[Date.parse(buildDuration[i].querySelector('.key').textContent)]
-        = parseFloat(buildDuration[i].querySelector('.value').textContent);
-
-}
-console.log("dataBuildDurationDict: ", dataBuildDurationDict);
-
-dict = sortOnKeys(dataBuildDurationDict)[0];
-labelsB = sortOnKeys(dataBuildDurationDict)[1];
-console.log("build duration dict values",dict);
-
-// build Duration create chart settings
-var successRate = document.querySelectorAll(".successRate");
+// success rate chart settings
 
 var successRateSelect = document.querySelector("#selectSuccess");
-function pausecomp(millis)
-{
-    var date = new Date();
-    var curDate = null;
-    do { curDate = new Date(); }
-    while(curDate-date < millis);
-}
-//successRateSelect.addEventListener("change", (e) => {
-function pausecomp222(){
-//pausecomp(3000);
-var successRate2 = document.querySelector("#msg").textContent;
+
+function createSuccessRateChart(period){
+console.log("period", period)
+var successRate2 = document.querySelector("#successRateData").textContent;
   console.log(successRate2);
   var obj = JSON.parse(successRate2);
   console.log("json", obj);
@@ -90,15 +91,13 @@ console.log(obj.count);
    for (var key in obj){
   console.log("111", key);
 
-//      dataSuccessRateDict[Date.parse(successRate[i].querySelector('.key').textContent)]
-//          = parseFloat(successRate[i].querySelector('.value').textContent);
 
 dataSuccessRateDict[Date.parse(key)] = parseFloat(obj[key]);
   }
   console.log("dataSuccessRateDict: ", dataSuccessRateDict);
 
-  dictSuccess = sortOnKeys(dataSuccessRateDict)[0];
-  labelsSuccess = sortOnKeys(dataSuccessRateDict)[1];
+  dictSuccess = sortOnKeys(dataSuccessRateDict, period)[0];
+  labelsSuccess = sortOnKeys(dataSuccessRateDict, period)[1];
 
   const data = {
     labels: labelsSuccess,
@@ -131,94 +130,40 @@ dataSuccessRateDict[Date.parse(key)] = parseFloat(obj[key]);
   if (perfChartJsCharts["successRateChart"]) perfChartJsCharts["successRateChart"].destroy();
   perfChartJsCharts["successRateChart"] = new Chart(ctx, allPerf);
 
-
-//});
 }
 
 
+// build duration chart settings
+
+var buildDurationSelect = document.querySelector("#selectBuildDuration");
+
+function createBuildDurationChart(period){
+console.log("period", period)
+var buildDuration = document.querySelector("#buildDurationData").textContent;
+  console.log(buildDuration);
+  var obj = JSON.parse(buildDuration);
+  console.log("json", obj);
+
+  var dataBuildDurationValues = [];
+  var dataBuildDurationDict = {};
+console.log(obj.count);
+   for (var key in obj){
+  console.log("111", key);
+  console.log("Date.parse(key)", Date.parse(key));
 
 
+dataBuildDurationDict[Date.parse(key)] = parseFloat(obj[key]);
+  }
+  console.log("dataBuildDurationDict: ", dataBuildDurationDict);
 
-var dataSuccessRateValues = [];
-var dataSuccessRateDict = {};
-
-for (var i=0; i<successRate.length; i++){
-
-    dataSuccessRateDict[Date.parse(successRate[i].querySelector('.key').textContent)]
-        = parseFloat(successRate[i].querySelector('.value').textContent);
-
-}
-console.log("dataSuccessRateDict: ", dataSuccessRateDict);
-
-dictSuccess = sortOnKeys(dataSuccessRateDict)[0];
-labelsSuccess = sortOnKeys(dataSuccessRateDict)[1];
-console.log("success rate dict values",dictSuccess);
-
-
-// time Queue create chart settings
-var timeQueue = document.querySelectorAll(".timeQueue");
-
-var dataTimeQueueValues = [];
-var dataTimeQueueDict = {};
-
-for (var i=0; i<timeQueue.length; i++){
-
-    dataTimeQueueDict[Date.parse(timeQueue[i].querySelector('.key').textContent)]
-        = parseFloat(timeQueue[i].querySelector('.value').textContent);
-
-}
-console.log("dataTimeQueueDict: ", dataTimeQueueDict);
-
-dictTimeQueue = sortOnKeys(dataTimeQueueDict)[0];
-labelsTimeQueue = sortOnKeys(dataTimeQueueDict)[1];
-console.log("time spent queue dict values",dictTimeQueue);
-
-// artifact create chart settings
-var artifactSize = document.querySelectorAll(".artifactSize");
-
-var dataArtifactSizeValues = [];
-var dataArtifactSizeDict = {};
-
-for (var i=0; i<artifactSize.length; i++){
-
-    dataArtifactSizeDict[Date.parse(artifactSize[i].querySelector('.key').textContent)]
-        = parseFloat(artifactSize[i].querySelector('.value').textContent);
-
-}
-console.log("dataArtifactSizeDict: ", dataArtifactSizeDict);
-
-dictArtifactSize = sortOnKeys(dataArtifactSizeDict)[0];
-labelsArtifactSize = sortOnKeys(dataArtifactSizeDict)[1];
-console.log("artifact size dict values",dictArtifactSize);
-
-
-
-
-const labels = Array.from({length: 30}, (_, i) => i + 1);
-
-const data = {
-  labels: labelsSuccess,
-  datasets: [{
-    label: 'Success rate',
-    data: dictSuccess,
-    backgroundColor: [
-      'rgba(0, 255, 0, 0.5)',
-    ],
-    borderColor: [
-      'rgb(0, 69, 36)',
-    ],
-    categoryPercentage: 1,
-    borderWidth: 1,
-    barPercentage: 1,
-  }]
-};
-
+  dictBuildDuration = sortOnKeys(dataBuildDurationDict, period)[0];
+  labelsBuildDuration = sortOnKeys(dataBuildDurationDict, period)[1];
 
 const dataBuildDuration = {
-  labels: labelsB,
+  labels: labelsBuildDuration,
   datasets: [{
     label: 'Build duration',
-    data: dict,
+    data: dictBuildDuration,
     borderColor: [
       'rgba(0, 180, 33, 1)',
     ],
@@ -226,9 +171,92 @@ const dataBuildDuration = {
 
   }]
 };
+var settingsBuildDuration = {
+                        type: 'line',
+                        data: dataBuildDuration,
+                      };
+  if (perfChartJsCharts["buildDurationChart"]) perfChartJsCharts["buildDurationChart"].destroy();
+  perfChartJsCharts["buildDurationChart"] = new Chart(ctxBuild, settingsBuildDuration);
 
-const dataTimeSpentQueue = {
-  labels: labelsB,
+}
+
+
+
+// artifact size chart settings
+
+var artifactSizeSelect = document.querySelector("#selectArtifactSize");
+
+function createArtifactSizeChart(period){
+console.log("period", period)
+var artifactSize = document.querySelector("#artifactSizeData").textContent;
+  console.log(artifactSize);
+  var obj = JSON.parse(artifactSize);
+  console.log("json", obj);
+
+  var dataArtifactSizeValues = [];
+  var dataArtifactSizeDict = {};
+console.log(obj.count);
+   for (var key in obj){
+  console.log("111", key);
+  console.log("Date.parse(key)", Date.parse(key));
+
+
+dataArtifactSizeDict[Date.parse(key)] = parseFloat(obj[key]);
+  }
+  console.log("dataArtifactSizeDict: ", dataArtifactSizeDict);
+
+  dictArtifactSize = sortOnKeys(dataArtifactSizeDict, period)[0];
+  labelsArtifactSize = sortOnKeys(dataArtifactSizeDict, period)[1];
+
+const dataArtifactSize = {
+  labels: labelsArtifactSize,
+  datasets: [{
+    label: 'Artifact Size',
+    data: dictArtifactSize,
+    borderColor: [
+      'rgba(0, 180, 33, 1)',
+    ],
+    tension: 0.1
+
+  }]
+};
+var settingsArtifactSize = {
+                        type: 'line',
+                        data: dataArtifactSize,
+                      };
+  if (perfChartJsCharts["artifactSizeChart"]) perfChartJsCharts["artifactSizeChart"].destroy();
+  perfChartJsCharts["artifactSizeChart"] = new Chart(ctxArtifactsSize, settingsArtifactSize);
+
+}
+
+// time queue chart settings
+
+var timeQueueSelect = document.querySelector("#selectTimeQueue");
+
+function createTimeQueueChart(period){
+console.log("period", period)
+var timeQueue = document.querySelector("#timeQueueData").textContent;
+  console.log(timeQueue);
+  var obj = JSON.parse(timeQueue);
+  console.log("json", obj);
+
+  var dataTimeQueueValues = [];
+  var dataTimeQueueDict = {};
+console.log(obj.count);
+   for (var key in obj){
+  console.log("111", key);
+  console.log("Date.parse(key)", Date.parse(key));
+
+
+dataTimeQueueDict[Date.parse(key)] = parseFloat(obj[key]);
+  }
+  console.log("dataTimeQueueDict: ", dataTimeQueueDict);
+
+  dictTimeQueue = sortOnKeys(dataTimeQueueDict, period)[0];
+  labelsTimeQueue = sortOnKeys(dataTimeQueueDict, period)[1];
+
+const dataTimeQueue = {
+  labels: labelsTimeQueue,
   datasets: [{
     label: 'Time Spent In Queue',
     data: dictTimeQueue,
@@ -239,82 +267,14 @@ const dataTimeSpentQueue = {
 
   }]
 };
-const dataTestCount = {
-  labels: labels,
-  datasets: [{
-    label: 'Test Count',
-    data: Array.from({length: 30}, () => Math.floor(Math.random() * 60)),
-    borderColor: [
-      'rgba(0, 180, 33, 1)',
-    ],
-    tension: 0.1
-
-  }]
-};
-const dataArtifactsSize = {
-  labels: labelsArtifactSize,
-  datasets: [{
-    label: 'Artifacts Size',
-    data: dictArtifactSize,
-    borderColor: [
-      'rgba(0, 180, 33, 1)',
-    ],
-    tension: 0.1
-
-  }]
-};
-
-
-
-
-
-
-
-
-var allPerf = {
-                        type: 'bar',
-                        data: data,
-                        options: {
-                            scales: {
-                                  y: {
-                                    beginAtZero: true
-                                  }
-                                }
-                        }
-                      };
-
-
-var settingsBuildDuration = {
+var settingsTimeQueue = {
                         type: 'line',
-                        data: dataBuildDuration,
+                        data: dataTimeQueue,
                       };
-var settingsTimeSpentQueue = {
-                        type: 'line',
-                        data: dataTimeSpentQueue,
-                      };
-var settingsTestCount = {
-                        type: 'line',
-                        data: dataTestCount,
-                      };
-var settingsArtifactsSize = {
-                        type: 'line',
-                        data: dataArtifactsSize,
-                      };
-var ctx = document.getElementById("successRateChart").getContext("2d");
-var ctxBuild = document.getElementById("buildDurationChart").getContext("2d");
-var ctxTimeSpentQueue = document.getElementById("timeSpentQueue").getContext("2d");
-var ctxTestCount = document.getElementById("testCount").getContext("2d");
-var ctxArtifactsSize = document.getElementById("artifactsSize").getContext("2d");
-perfChartJsCharts["successRateChart"] = new Chart(ctx, allPerf);
-perfChartJsCharts["buildDurationChart"] = new Chart(ctxBuild, settingsBuildDuration);
-perfChartJsCharts["timeSpentQueue"] = new Chart(ctxTimeSpentQueue, settingsTimeSpentQueue);
-perfChartJsCharts["testCount"] = new Chart(ctxTestCount, settingsTestCount);
-perfChartJsCharts["artifactsSize"] = new Chart(ctxArtifactsSize, settingsArtifactsSize);
+  if (perfChartJsCharts["timeQueueChart"]) perfChartJsCharts["timeQueueChart"].destroy();
+  perfChartJsCharts["timeQueueChart"] = new Chart(ctxTimeSpentQueue, settingsTimeQueue);
 
-
-
-
-
+}
 
 
 
