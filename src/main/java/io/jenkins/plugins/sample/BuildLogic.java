@@ -6,12 +6,16 @@ import hudson.util.RunList;
 import java.text.ParseException;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BuildLogic {
     IntervalDate period;
     RunList<Run> buildList;
 
     Boolean failed;
+    static Logger LOGGER = Logger.getLogger(BuildLogic.class.getName());
+
 
     public BuildLogic(IntervalDate period, Boolean failed, RunList<Run> buildList) {
         this.period = period;
@@ -45,14 +49,18 @@ public class BuildLogic {
                 Date dateDay = Date.from(ZonedDateTime.now().minusHours(24).toInstant());
                 this.buildList = buildList.filter(run -> {
                     try {
+                        LOGGER.log(Level.WARNING, "runTime: " + DateTimeHandler.convertLongTimeToDate(run.getStartTimeInMillis()));
+                        LOGGER.log(Level.WARNING, "runTime: " + run.getStartTimeInMillis() + "now " + DateTimeHandler.convertDateToLongTime(dateDay));
+                        LOGGER.log(Level.WARNING, "bool check: " + (run.getStartTimeInMillis() >= DateTimeHandler.convertDateToLongTime(dateDay)));
                         return run.getStartTimeInMillis() >= DateTimeHandler.convertDateToLongTime(dateDay);
                     } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
                 });
+                LOGGER.log(Level.WARNING, "dat filter: " + (this.buildList));
                 break;
             case WEEK:
-                Date dateWeek = Date.from(ZonedDateTime.now().minusWeeks(1).toInstant());
+                Date dateWeek = Date.from(ZonedDateTime.now().minusDays(6).toInstant());
                 this.buildList = buildList.filter(run -> {
                     try {
                         return run.getStartTimeInMillis() >= DateTimeHandler.convertDateToLongTime(dateWeek);

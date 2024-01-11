@@ -140,30 +140,6 @@
 
                         <p class="period">${value1}</p>
 
-                        <j:forEach var="type" items="${it.getBuildDuration(value1, '1','1')}">
-                                <p class="buildDuration">
-                                        <span class="key">${type.key}</span>
-                                        <span class="value">${type.value}</span>
-                                </p>
-                        </j:forEach>
-                        <j:forEach var="successRate" items="${it.getBuildSuccessRate(value1)}">
-                                <p class="successRate">
-                                        <span class="key">${successRate.key}</span>
-                                        <span class="value">${successRate.value}</span>
-                                </p>
-                        </j:forEach>
-                        <j:forEach var="timeQueue" items="${it.getBuildTimeQueue(value1, '1')}">
-                                <p class="timeQueue">
-                                        <span class="key">${timeQueue.key}</span>
-                                        <span class="value">${timeQueue.value}</span>
-                                </p>
-                        </j:forEach>
-                        <j:forEach var="artifactSize" items="${it.getBuildArtifactSize(value1, '1','1')}">
-                                <p class="artifactSize">
-                                        <span class="key">${artifactSize.key}</span>
-                                        <span class="value">${artifactSize.value}</span>
-                                </p>
-                        </j:forEach>
                         <j:forEach var="testCount" items="${it.getBuildTestCount(value1, '1')}">
                                 <p class="testCount">
                                         <span class="key">${testCount.key}</span>

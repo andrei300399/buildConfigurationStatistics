@@ -55,6 +55,7 @@ public class BuildDurationLogic extends BuildLogic {
 
 
         HashMap<String, Integer> dayDurationAverage = new HashMap<>();
+        LOGGER.log(Level.WARNING, "buildList: " + (this.buildList));
         for (Run run : this.buildList) {
             String dateFormatKeyAfterCheckPeriod =
                     DateTimeHandler.dateToString(
@@ -63,6 +64,10 @@ public class BuildDurationLogic extends BuildLogic {
                             ), dateFormatKey
                     );
             LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod: " + dateFormatKeyAfterCheckPeriod);
+            if (this.period == IntervalDate.DAY) {
+                dateFormatKeyAfterCheckPeriod = DateTimeHandler.dateSetZeroMinutesSeconds(dateFormatKeyAfterCheckPeriod);
+                LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod for day zero: " + dateFormatKeyAfterCheckPeriod);
+            }
             if (dateFormatDuration.get(dateFormatKeyAfterCheckPeriod) == 0.0) {
                 dateFormatDuration.put(dateFormatKeyAfterCheckPeriod, run.getDuration() / 1000.0);
                 LOGGER.log(Level.WARNING, "getDuration: " + run.getDuration());

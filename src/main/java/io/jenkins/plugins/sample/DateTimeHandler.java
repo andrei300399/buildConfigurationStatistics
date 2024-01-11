@@ -61,6 +61,17 @@ public class DateTimeHandler {
         return strDate;
     }
 
+    public static String dateSetZeroMinutesSeconds(String dateString) throws ParseException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH");
+        Date date = sdf.parse(dateString);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        return dateToString(cal.getTime(), "yyyy-MM-dd HH:mm:ss");
+    }
+
     /**
      * Create map format {23.12: 0.0, 24.12: 0.0 ...}
      * on 30-31 days
@@ -91,7 +102,7 @@ public class DateTimeHandler {
      * on 24 hours
      *
      * **/
-    public static HashMap<String, Double> createDateDayMap() {
+    public static HashMap<String, Double> createDateDayMap() throws ParseException {
         ZonedDateTime dateTime = ZonedDateTime.now().minusHours(24);
         Logger LOGGER;
         LOGGER = Logger.getLogger(DateTimeHandler.class.getName());
@@ -101,14 +112,44 @@ public class DateTimeHandler {
         LOGGER.log(Level.INFO, "lenDay: " + lenDay);
         for (int i = 1; i <= lenDay; i++) {
 
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String strDate = dateFormat.format(
                     Date.from(dateTime.plusHours(i).toInstant()).getTime());
+            strDate = DateTimeHandler.dateSetZeroMinutesSeconds(strDate);
             LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
             hourDuration.put(strDate, 0.0);
         }
         LOGGER.log(Level.INFO, "hourDuration: " + hourDuration.entrySet());
         return hourDuration;
+    }
+
+    /**
+     * Create map format {1:00:00 {success: 0, fail : 0}, 2:00:00: {success: 0, fail : 0} ...}
+     * on 24 hours
+     *
+     * **/
+    public static HashMap<String, HashMap<String,Integer>> createDateDayMapSuccess() throws ParseException {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusHours(24);
+        Logger LOGGER;
+        LOGGER = Logger.getLogger(DateTimeHandler.class.getName());
+        LOGGER.log(Level.INFO, "dateTime days" + dateTime);
+        HashMap<String, HashMap<String,Integer>> successFailSuccess = new HashMap();
+        int lenDay = 24;
+        LOGGER.log(Level.INFO, "lenDay: " + lenDay);
+        for (int i = 1; i <= lenDay; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String strDate = dateFormat.format(
+                    Date.from(dateTime.plusHours(i).toInstant()).getTime());
+            strDate = DateTimeHandler.dateSetZeroMinutesSeconds(strDate);
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            successFailSuccess.put(strDate, new HashMap(){{
+                put("fail", 0);
+                put("success", 0);
+            }});
+        }
+        LOGGER.log(Level.INFO, "hour successFailSuccess: " + successFailSuccess.entrySet());
+        return successFailSuccess;
     }
 
     public static HashMap<String, HashMap<String,Integer>> createDateWeekMapSuccessRate() {
@@ -150,6 +191,34 @@ public class DateTimeHandler {
             //get dateTime previous month + i = 1...31 day and getTime, after in strDate=2022-03-22
             String strDate = dateFormat.format(
                     Date.from(dateTime.plusDays(i).toInstant()).getTime());
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            successFailSuccess.put(strDate, new HashMap(){{
+                put("fail", 0);
+                put("success", 0);
+            }});
+        }
+        LOGGER.log(Level.INFO, "successFailSuccess: " + successFailSuccess.entrySet());
+        return successFailSuccess;
+    }
+
+    /**
+     * Create map format {2/2022: {success: 0, fail : 0}, 3/2022: {success: 0, fail : 0} ...}
+     * on 4 month
+     *
+     * **/
+
+    public static HashMap<String, HashMap<String,Integer>> createDateQuarterMapSuccessRate() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(4);
+        LOGGER.log(Level.INFO, "dateTime QuarterMapSuccess" + dateTime);
+        HashMap<String, HashMap<String,Integer>> successFailSuccess = new HashMap();
+        int lenQuarterSuccess = 4;
+        LOGGER.log(Level.INFO, "lenQuarterSuccess QuarterMapSuccess: " + lenQuarterSuccess);
+        for (int i = 1; i <= lenQuarterSuccess; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+            //get dateTime previous quarter + i = 1...4 month and getTime, after in strDate=2022-03
+            String strDate = dateFormat.format(
+                    Date.from(dateTime.plusMonths(i).toInstant()).getTime());
             LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
             successFailSuccess.put(strDate, new HashMap(){{
                 put("fail", 0);
@@ -220,7 +289,7 @@ public class DateTimeHandler {
      *
      * **/
     public static HashMap<String, Double> createDateQuarterMap() {
-        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(3);
+        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(4);
         LOGGER.log(Level.INFO, "last quarter dateTime" + dateTime);
         HashMap<String, Double> quarterDuration = new HashMap<String, Double>();
         int lengthQuarter = 4; // any year length in month

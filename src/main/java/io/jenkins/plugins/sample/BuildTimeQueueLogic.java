@@ -34,6 +34,18 @@ public class BuildTimeQueueLogic extends BuildLogic {
                 dateFormatDuration = DateTimeHandler.createDateYearMap();
                 dateFormatKey = "yyyy-MM";
                 break;
+            case QUARTER:
+                dateFormatDuration = DateTimeHandler.createDateQuarterMap();
+                dateFormatKey = "yyyy-MM";
+                break;
+            case DAY:
+                dateFormatDuration = DateTimeHandler.createDateDayMap();
+                dateFormatKey = "yyyy-MM-dd HH";
+                break;
+            case ALL:
+                dateFormatDuration = DateTimeHandler.createDateYearMap();
+                dateFormatKey = "yyyy-MM";
+                break;
         }
 
 
@@ -46,6 +58,10 @@ public class BuildTimeQueueLogic extends BuildLogic {
                             ), dateFormatKey
                     );
             LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod time Queue: " + dateFormatKeyAfterCheckPeriod);
+            if (this.period == IntervalDate.DAY) {
+                dateFormatKeyAfterCheckPeriod = DateTimeHandler.dateSetZeroMinutesSeconds(dateFormatKeyAfterCheckPeriod);
+                LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod for day zero: " + dateFormatKeyAfterCheckPeriod);
+            }
             long runTimeInQueue = new TimeInQueueFetcher().getTimeInQueue(run);
             if (dateFormatDuration.get(dateFormatKeyAfterCheckPeriod) == 0.0) {
 

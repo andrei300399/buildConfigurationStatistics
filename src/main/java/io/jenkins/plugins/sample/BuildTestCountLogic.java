@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import hudson.tasks.junit.TestResultAction;
+
 
 public class BuildTestCountLogic extends BuildLogic {
 
@@ -40,41 +40,39 @@ public class BuildTestCountLogic extends BuildLogic {
         }
 
         for (Run run : this.buildList) {
-            String dateFormatKeyAfterCheckPeriod =
-                    DateTimeHandler.dateToString(
-                            DateTimeHandler.convertLongTimeToDate(
-                                    run.getStartTimeInMillis()
-                            ), dateFormatKey
-                    );
-            LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod: " + dateFormatKeyAfterCheckPeriod);
-            if (testCountOnFormatDate.get(dateFormatKeyAfterCheckPeriod) == 0) {
-                testCountOnFormatDate.put(dateFormatKeyAfterCheckPeriod, getTestCountForRun(run));
-            } else {
-                testCountOnFormatDate.put(dateFormatKeyAfterCheckPeriod, testCountOnFormatDate.get(dateFormatKeyAfterCheckPeriod) + getTestCountForRun(run));
-            }
-            LOGGER.log(Level.INFO, "testCountOnFormatDate: " + testCountOnFormatDate);
-
+//            TestResultAction testResultAction = run.getAction(TestResultAction.class);
+//            LOGGER.log(Level.SEVERE, "test LOGGER: " + testResultAction);
+           // LOGGER.log(Level.CONFIG, "testCountMap: " + getTestCountForRun(run));
         }
+//            String dateFormatKeyAfterCheckPeriod =
+//                    DateTimeHandler.dateToString(
+//                            DateTimeHandler.convertLongTimeToDate(
+//                                    run.getStartTimeInMillis()
+//                            ), dateFormatKey
+//                    );
+//            LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod: " + dateFormatKeyAfterCheckPeriod);
+//            if (testCountOnFormatDate.get(dateFormatKeyAfterCheckPeriod) == 0) {
+//                testCountOnFormatDate.put(dateFormatKeyAfterCheckPeriod, getTestCountForRun(run));
+//            } else {
+//                testCountOnFormatDate.put(dateFormatKeyAfterCheckPeriod, testCountOnFormatDate.get(dateFormatKeyAfterCheckPeriod) + getTestCountForRun(run));
+//            }
+//            LOGGER.log(Level.INFO, "testCountOnFormatDate: " + testCountOnFormatDate);
+//
+//        }
 
-        LOGGER.log(Level.INFO, "testCountMap: " + testCountOnFormatDate);
+        LOGGER.log(Level.CONFIG, "testCountMap: " + testCountOnFormatDate);
 
         return testCountOnFormatDate;
     }
 
 
-    public int getTestCountForRun(Run run) {
-        int testCount = 0;
-//        Jenkins jenkinsInstance = Jenkins.getInstance();
-//        if (jenkinsInstance != null) {
-//            Job job = (Job) jenkinsInstance.getItem(jobName);
-//            if (job != null && job instanceof AbstractProject) {
-//                AbstractProject abstractProject = (AbstractProject) job;
-//                AbstractTestResultAction abstractTestResultAction = abstractProject.getLastCompletedBuild().getAction(AbstractTestResultAction.class);
-//                if (abstractTestResultAction != null) {
-//                    return abstractTestResultAction.getTotalCount();
-//                }
+//    public int getTestCountForRun(Run run) {
+//        int testCount = 0;
+//        TestResultAction testResultAction = run.getAction(TestResultAction.class);
+//            if (testResultAction != null) {
+//                return testResultAction.getTotalCount();
 //            }
-//        }
-        return testCount;
-    }
+//            return 0;
+//
+//    }
 }

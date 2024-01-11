@@ -34,6 +34,18 @@ public class BuildArtifactSizeLogic extends BuildLogic {
                 dateFormatArtifact = DateTimeHandler.createDateYearMap();
                 dateFormatKey = "yyyy-MM";
                 break;
+            case QUARTER:
+                dateFormatArtifact = DateTimeHandler.createDateQuarterMap();
+                dateFormatKey = "yyyy-MM";
+                break;
+            case DAY:
+                dateFormatArtifact = DateTimeHandler.createDateDayMap();
+                dateFormatKey = "yyyy-MM-dd HH";
+                break;
+            case ALL:
+                dateFormatArtifact = DateTimeHandler.createDateYearMap();
+                dateFormatKey = "yyyy-MM";
+                break;
         }
 
 
@@ -46,6 +58,10 @@ public class BuildArtifactSizeLogic extends BuildLogic {
                             ), dateFormatKey
                     );
             LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod artifact: " + dateFormatKeyAfterCheckPeriod);
+            if (this.period == IntervalDate.DAY) {
+                dateFormatKeyAfterCheckPeriod = DateTimeHandler.dateSetZeroMinutesSeconds(dateFormatKeyAfterCheckPeriod);
+                LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod for day zero: " + dateFormatKeyAfterCheckPeriod);
+            }
             LOGGER.log(Level.WARNING, "getArtifacts: " + run.getArtifacts());
             List<Run.Artifact> listArtifacts = run.getArtifacts();
             double artifactsRunSize = 0;

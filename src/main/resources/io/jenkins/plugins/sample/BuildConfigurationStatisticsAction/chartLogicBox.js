@@ -26,6 +26,13 @@ perfChartJsCharts["testCount"] = new Chart(ctxTestCount, settingsTestCount);
 
 function formatLabelsDate(arrLabels, dateFormat, period) {
 switch(period) {
+    case 'DAY':
+                 arrLabels.push(
+                            dateFormat.getDate()+
+                                       " "+(dateFormat.getHours())+":0"+(dateFormat.getMinutes())
+
+                       );
+    break;
     case 'WEEK':
     case 'MONTH':
                  arrLabels.push(

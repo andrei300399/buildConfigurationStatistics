@@ -49,6 +49,18 @@ public class BuildSuccessRateLogic extends BuildLogic {
                 successRateOnFormatDate = DateTimeHandler.createDateYearMapSuccessRate();
                 dateFormatKey = "yyyy-MM";
                 break;
+            case QUARTER:
+                successRateOnFormatDate = DateTimeHandler.createDateQuarterMapSuccessRate();
+                dateFormatKey = "yyyy-MM";
+                break;
+            case DAY:
+                successRateOnFormatDate = DateTimeHandler.createDateDayMapSuccess();
+                dateFormatKey = "yyyy-MM-dd HH";
+                break;
+            case ALL:
+                successRateOnFormatDate = DateTimeHandler.createDateWeekMapSuccessRate();
+                dateFormatKey = "yyyy-MM";
+                break;
         }
 
         for (Run run : this.buildList) {
@@ -59,6 +71,10 @@ public class BuildSuccessRateLogic extends BuildLogic {
                             ), dateFormatKey
                     );
             LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod: " + dateFormatKeyAfterCheckPeriod);
+            if (this.period == IntervalDate.DAY) {
+                dateFormatKeyAfterCheckPeriod = DateTimeHandler.dateSetZeroMinutesSeconds(dateFormatKeyAfterCheckPeriod);
+                LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod for day zero: " + dateFormatKeyAfterCheckPeriod);
+            }
             if (run.getResult().isBetterOrEqualTo(Result.SUCCESS)){
                 successRateOnFormatDate.get(dateFormatKeyAfterCheckPeriod).put("success", (successRateOnFormatDate.get(dateFormatKeyAfterCheckPeriod).get("success")) + 1);
             } else {
@@ -66,13 +82,7 @@ public class BuildSuccessRateLogic extends BuildLogic {
             }
             LOGGER.log(Level.INFO, "successRateOnFormatDate: " + successRateOnFormatDate);
 
-//            if (successRateOnFormatDate.get(dateFormatKeyAfterCheckPeriod).get("fail") == 0.0) {
-//                successRateOnFormatDate.put(dateFormatKeyAfterCheckPeriod,
-//                        //(run.getResult().isBetterOrEqualTo(Result.SUCCESS)) ? );
-//
-//            } else {
-//                successRateOnFormatDate.put(dateFormatKeyAfterCheckPeriod, successRateOnFormatDate.get(dateFormatKeyAfterCheckPeriod) + run.getDuration() / 1000.0);
-//            }
+
         }
         HashMap<String, Double> successRateMap = new HashMap<String, Double>();
         for (Map.Entry<String, HashMap<String, Integer>> entry : successRateOnFormatDate.entrySet()) {

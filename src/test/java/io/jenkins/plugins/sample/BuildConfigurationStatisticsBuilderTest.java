@@ -251,7 +251,7 @@ public class BuildConfigurationStatisticsBuilderTest {
     }
 
     @Test
-    public void testCreateDateDayMap()  {
+    public void testCreateDateDayMap() throws ParseException {
         HashMap<String, Double> dictDateDayZero = DateTimeHandler.createDateDayMap();
         assert  dictDateDayZero.size() == 24;
         assert  !dictDateDayZero.isEmpty();
