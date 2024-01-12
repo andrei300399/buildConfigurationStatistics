@@ -3,14 +3,8 @@ package io.jenkins.plugins.sample;
 import com.google.gson.Gson;
 import hudson.model.Action;
 import hudson.model.Job;
-import jenkins.security.stapler.StaplerDispatchable;
-import org.kohsuke.stapler.StaplerRequest;
-import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
-import org.kohsuke.stapler.interceptor.RequirePOST;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.logging.Level;
@@ -18,11 +12,7 @@ import java.util.logging.Logger;
 
 
 public class BuildConfigurationStatisticsAction implements Action {
-
-
-
     private Job job;
-    private String str = "asd";
 
     public BuildConfigurationStatisticsAction(Job job) {
         this.job = job;
@@ -45,10 +35,6 @@ public class BuildConfigurationStatisticsAction implements Action {
 
     public Job getJob() {
         return job;
-    }
-
-    public String getStr() {
-        return str;
     }
 
     @JavaScriptMethod
@@ -96,14 +82,18 @@ public class BuildConfigurationStatisticsAction implements Action {
     }
 
     @JavaScriptMethod
-    public Map<String, Integer> getBuildTestCount(String period, String fail) throws ParseException {
+    public String getBuildTestCount(String period, String fail) throws ParseException {
         Logger LOGGER = Logger.getLogger("TestCount");
         LOGGER.log(Level.INFO, "arg jelly TestCount: " + period);
         LOGGER.log(Level.INFO, "failed TestCount: " + fail);
         IntervalDate intreval = IntervalDate.valueOf(period);
         Boolean failed = fail.equals("1");
 
-        return new BuildTestCountLogic(intreval, job.getBuilds()).getTestCount();
+        Gson gson = new Gson();
+        Map<String, Integer> map = new BuildTestCountLogic(intreval, job.getBuilds()).getTestCount();
+        String gsonData = gson.toJson(map);
+        LOGGER.log(Level.INFO, "gson TestCount: " + gsonData);
+        return gsonData;
     }
 
     @JavaScriptMethod

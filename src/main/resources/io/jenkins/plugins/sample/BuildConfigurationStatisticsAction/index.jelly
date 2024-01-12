@@ -49,17 +49,11 @@
 
                         <h1>Statistics for job ${it.job.name}</h1>
 
-
-
-                        <j:set var="value1" value="WEEK"/>
-
-
-
-                        <div id="successRateData" >${it.str}</div>
-                        <div id="buildDurationData" >${it.str}</div>
-                        <div id="artifactSizeData" >${it.str}</div>
-                        <div id="testCountData" >${it.str}</div>
-                        <div id="timeQueueData" >${it.str}</div>
+                        <div id="successRateData" ></div>
+                        <div id="buildDurationData" ></div>
+                        <div id="artifactSizeData" ></div>
+                        <div id="testCountData" ></div>
+                        <div id="timeQueueData" ></div>
 
                         <st:bind var="myItem" value="${it}"/>
 
@@ -134,13 +128,29 @@
 
                                 }
 
+                                myObjectBuild.getBuildTestCount('MONTH', '0', function(t) {
+                                document.getElementById('testCountData').innerHTML = t.responseObject();
+                                createTestCountChart('MONTH');
+                                });
+                                function myCheckTestCount(){
+                                var strPeriod = document.getElementById("selectTestCount").value;
+                                var checkFailed = document.getElementById('checkboxFailedTestCount').checked ?  '1' : '0';
+
+                                console.log(strPeriod, "strPeriod TestCount");
+                                myObjectBuild.getBuildTestCount(strPeriod, checkFailed, function(t) {
+                                document.getElementById('testCountData').innerHTML = t.responseObject();
+                                createTestCountChart(strPeriod);
+                                });
+
+                                }
+
 
 
                         </script>
 
-                        <p class="period">${value1}</p>
+                        <p class="period">WEEK</p>
 
-                        <j:forEach var="testCount" items="${it.getBuildTestCount(value1, '1')}">
+                        <j:forEach var="testCount" items="${it.getBuildTestCount('WEEK', '1')}">
                                 <p class="testCount">
                                         <span class="key">${testCount.key}</span>
                                         <span class="value">${testCount.value}</span>
@@ -230,7 +240,7 @@
                                 <form class="settings">
                                         <label>
                                                 Range:
-                                                <select>
+                                                <select id="selectTestCount" onchange="myCheckTestCount()">
                                                         <option value="MONTH">Month</option>
                                                         <option value="DAY">Day</option>
                                                         <option value="YEAR">Year</option>
@@ -242,7 +252,7 @@
                                         </label>
                                         <label>
                                                 Show failed:
-                                                <input type="checkbox"/>
+                                                <input type="checkbox" id="checkboxFailedTestCount" onchange="myCheckTestCount()"/>
                                         </label>
 
                                 </form>
@@ -278,7 +288,6 @@
                         </div>
 
                 </l:main-panel>
-                <p id="ll"></p>
         </l:layout>
         <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.declareChartJsClickArray"/>
         <st:adjunct includes="io.jenkins.plugins.sample.BuildConfigurationStatisticsAction.chartLogicBox"/>

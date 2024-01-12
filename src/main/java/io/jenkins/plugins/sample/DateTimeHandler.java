@@ -240,7 +240,7 @@ public class DateTimeHandler {
         LOGGER.log(Level.INFO, "dateTime test count" + dateTime);
         HashMap<String, Integer> testCount = new HashMap();
         int lenMonth = getLastMonthDays();
-        LOGGER.log(Level.INFO, "lenMonth: " + lenMonth);
+        LOGGER.log(Level.INFO, "lenMonth test count: " + lenMonth);
         for (int i = 1; i <= lenMonth; i++) {
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -253,6 +253,121 @@ public class DateTimeHandler {
         LOGGER.log(Level.INFO, "testCount: " + testCount.entrySet());
         return testCount;
     }
+
+    /**
+     * Create map format {12 10:00: 0, 12 11:00: 0 ...}
+     * on 24 hours
+     *
+     * **/
+
+    public static HashMap<String, Integer> createDateDayMapTestCount() throws ParseException {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusHours(24);
+        Logger LOGGER;
+        LOGGER = Logger.getLogger(DateTimeHandler.class.getName());
+        LOGGER.log(Level.INFO, "dateTime days test count" + dateTime);
+        HashMap<String, Integer> hourDuration = new HashMap<String, Integer>();
+        int lenDay = 24;
+        LOGGER.log(Level.INFO, "lenDay: " + lenDay);
+        for (int i = 1; i <= lenDay; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String strDate = dateFormat.format(
+                    Date.from(dateTime.plusHours(i).toInstant()).getTime());
+            strDate = DateTimeHandler.dateSetZeroMinutesSeconds(strDate);
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            hourDuration.put(strDate, 0);
+        }
+        LOGGER.log(Level.INFO, "hourDuration: " + hourDuration.entrySet());
+        return hourDuration;
+    }
+
+    /**
+     * Create map format {2/2022: 0, 3/2022: 0 ...}
+     * on 12 month
+     *
+     * **/
+    public static HashMap<String, Integer> createDateYearMapTestCount() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusYears(1);
+        LOGGER.log(Level.INFO, "last year dateTime test" + dateTime);
+        HashMap<String, Integer> monthDuration = new HashMap<String, Integer>();
+        int lengthYear = 12; // any year length in month
+        LOGGER.log(Level.INFO, "lengthYear test: " + lengthYear);
+        for (int i = 1; i <= lengthYear; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+
+            //get dateTime previous year + i = 1...12 and getTime, after in strDate=2022-03
+            String strDate = dateFormat.format(
+                    Date.from(
+                            dateTime.plusMonths(i).toInstant()
+                    ).getTime()
+            );
+
+            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+            monthDuration.put(strDate, 0);
+        }
+        LOGGER.log(Level.INFO, "monthDuration: " + monthDuration.entrySet());
+        return monthDuration;
+    }
+
+    /**
+     * Create map format {2/2022: 0, 3/2022: 0 ...}
+     * on 3 month
+     *
+     * **/
+    public static HashMap<String, Integer> createDateQuarterMapTestCount() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(4);
+        LOGGER.log(Level.INFO, "last quarter dateTime test" + dateTime);
+        HashMap<String, Integer> quarterDuration = new HashMap<String, Integer>();
+        int lengthQuarter = 4; // any year length in month
+        LOGGER.log(Level.INFO, "lengthQuarter test: " + lengthQuarter);
+        for (int i = 1; i <= lengthQuarter; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+
+            //get dateTime previous year + i = 1...3 and getTime, after in strDate=2022-03
+            String strDate = dateFormat.format(
+                    Date.from(
+                            dateTime.plusMonths(i).toInstant()
+                    ).getTime()
+            );
+
+            LOGGER.log(Level.INFO, "strdate i test: " + i + " - " + strDate);
+            quarterDuration.put(strDate, 0);
+        }
+        LOGGER.log(Level.INFO, "quarterDuration test: " + quarterDuration.entrySet());
+        return quarterDuration;
+    }
+
+    /**
+     * Create map format {1/2/2022: 0.0, 3/2/2022: 0.0 ...}
+     * on 1 week
+     *
+     * **/
+    public static HashMap<String, Integer> createDateWeekMapTestCount() {
+        ZonedDateTime dateTime = ZonedDateTime.now().minusWeeks(1);
+        LOGGER.log(Level.INFO, "last week dateTime test" + dateTime);
+        HashMap<String, Integer> weekDuration = new HashMap<String, Integer>();
+        int lengthWeek = 7; // any week length in days
+        LOGGER.log(Level.INFO, "lengthWeek test: " + lengthWeek);
+        for (int i = 1; i <= lengthWeek; i++) {
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            //get dateTime previous week + i = 1...7 and getTime, after in strDate=2022-03-01
+            String strDate = dateFormat.format(
+                    Date.from(
+                            dateTime.plusDays(i).toInstant()
+                    ).getTime()
+            );
+
+            LOGGER.log(Level.INFO, "strdate i test: " + i + " - " + strDate);
+            weekDuration.put(strDate, 0);
+        }
+        LOGGER.log(Level.INFO, "weekDuration test: " + weekDuration.entrySet());
+        return weekDuration;
+    }
+
 
     /**
      * Create map format {2/2022: 0.0, 3/2022: 0.0 ...}

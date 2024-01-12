@@ -1,28 +1,28 @@
 //var scr1 = document.getElementById("script1");
 //console.log("ddddd", scr1);
-const labels = Array.from({length: 30}, (_, i) => i + 1);
-const dataTestCount = {
-  labels: labels,
-  datasets: [{
-    label: 'Test Count',
-    data: Array.from({length: 30}, () => Math.floor(Math.random() * 60)),
-    borderColor: [
-      'rgba(0, 180, 33, 1)',
-    ],
-    tension: 0.1
-
-  }]
-};
-var settingsTestCount = {
-                        type: 'line',
-                        data: dataTestCount,
-                      };
+//const labels = Array.from({length: 30}, (_, i) => i + 1);
+//const dataTestCount = {
+//  labels: labels,
+//  datasets: [{
+//    label: 'Test Count',
+//    data: Array.from({length: 30}, () => Math.floor(Math.random() * 60)),
+//    borderColor: [
+//      'rgba(0, 180, 33, 1)',
+//    ],
+//    tension: 0.1
+//
+//  }]
+//};
+//var settingsTestCount = {
+//                        type: 'line',
+//                        data: dataTestCount,
+//                      };
 var ctx = document.getElementById("successRateChart").getContext("2d");
 var ctxBuild = document.getElementById("buildDurationChart").getContext("2d");
 var ctxArtifactsSize = document.getElementById("artifactsSize").getContext("2d");
 var ctxTimeSpentQueue = document.getElementById("timeSpentQueue").getContext("2d");
 var ctxTestCount = document.getElementById("testCount").getContext("2d");
-perfChartJsCharts["testCount"] = new Chart(ctxTestCount, settingsTestCount);
+
 
 function formatLabelsDate(arrLabels, dateFormat, period) {
 switch(period) {
@@ -136,6 +136,54 @@ dataSuccessRateDict[Date.parse(key)] = parseFloat(obj[key]);
 
   if (perfChartJsCharts["successRateChart"]) perfChartJsCharts["successRateChart"].destroy();
   perfChartJsCharts["successRateChart"] = new Chart(ctx, allPerf);
+
+}
+
+
+// test count chart settings
+
+var testCountSelect = document.querySelector("#selectTestCount");
+
+function createTestCountChart(period){
+console.log("period", period)
+var testCount2 = document.querySelector("#testCountData").textContent;
+  console.log(testCount2);
+  var obj = JSON.parse(testCount2);
+  console.log("json", obj);
+
+  var dataTestCountValues = [];
+  var dataTestCountDict = {};
+console.log(obj.count);
+   for (var key in obj){
+  console.log("111", key);
+
+
+dataTestCountDict[Date.parse(key)] = parseFloat(obj[key]);
+  }
+  console.log("dataTestCountDict: ", dataTestCountDict);
+
+  dictTestCount = sortOnKeys(dataTestCountDict, period)[0];
+  labelsTestCount = sortOnKeys(dataTestCountDict, period)[1];
+
+const dataTestCount = {
+  labels: labelsTestCount,
+  datasets: [{
+    label: 'Test Count',
+    data: dictTestCount,
+    borderColor: [
+      'rgba(0, 180, 33, 1)',
+    ],
+    tension: 0.1
+
+  }]
+};
+var settingsTestCount = {
+                        type: 'line',
+                        data: dataTestCount,
+                      };
+
+  if (perfChartJsCharts["testCountChart"]) perfChartJsCharts["testCountChart"].destroy();
+  perfChartJsCharts["testCountChart"] = new Chart(ctxTestCount, settingsTestCount);
 
 }
 
