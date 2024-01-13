@@ -4,6 +4,7 @@ enum Statistics {
     SUM,
     AVG,
     MEDIAN,
+    RANGE,
     DISPERSION,
     SD,
     SDUNBIASED,

@@ -199,6 +199,7 @@
                                                         <option value="SUM">Sum</option>
                                                         <option value="AVG">Average</option>
                                                         <option value="MEDIAN">Median</option>
+                                                        <option value="RANGE">Range</option>
                                                         <option value="DISPERSION">Dispersion</option>
                                                         <option value="SD">Standard Deviation</option>
                                                         <option value="SDUNBIASED">Standard Deviation Unbiased</option>
@@ -237,6 +238,7 @@
                                                         <option value="SUM">Sum</option>
                                                         <option value="AVG">Average</option>
                                                         <option value="MEDIAN">Median</option>
+                                                        <option value="RANGE">Range</option>
                                                         <option value="DISPERSION">Dispersion</option>
                                                         <option value="SD">Standard Deviation</option>
                                                         <option value="SDUNBIASED">Standard Deviation Unbiased</option>
@@ -295,6 +297,7 @@
                                                         <option value="SUM">Sum</option>
                                                         <option value="AVG">Average</option>
                                                         <option value="MEDIAN">Median</option>
+                                                        <option value="RANGE">Range</option>
                                                         <option value="DISPERSION">Dispersion</option>
                                                         <option value="SD">Standard Deviation</option>
                                                         <option value="SDUNBIASED">Standard Deviation Unbiased</option>

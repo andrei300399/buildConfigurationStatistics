@@ -114,6 +114,11 @@ public class BuildArtifactSizeLogic extends BuildLogic {
                     LOGGER.log(Level.WARNING, "mean: " + mean);
                     dayArtifactMetric.put(entry.getKey(), mean);
                     break;
+                case RANGE:
+                    double range = descriptiveStatistics.getMax() - descriptiveStatistics.getMin();
+                    LOGGER.log(Level.WARNING, "range: " + range);
+                    dayArtifactMetric.put(entry.getKey(), range);
+                    break;
                 case MEDIAN:
                     double median = descriptiveStatistics.getPercentile(50);
                     LOGGER.log(Level.WARNING, "median: " + median);

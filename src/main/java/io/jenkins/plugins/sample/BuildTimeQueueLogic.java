@@ -115,6 +115,11 @@ public class BuildTimeQueueLogic extends BuildLogic {
                     LOGGER.log(Level.WARNING, "mean: " + mean);
                     dayTimeQueueMetric.put(entry.getKey(), mean);
                     break;
+                case RANGE:
+                    double range = descriptiveStatistics.getMax() - descriptiveStatistics.getMin();
+                    LOGGER.log(Level.WARNING, "range: " + range);
+                    dayTimeQueueMetric.put(entry.getKey(), range);
+                    break;
                 case MEDIAN:
                     double median = descriptiveStatistics.getPercentile(50);
                     LOGGER.log(Level.WARNING, "median: " + median);

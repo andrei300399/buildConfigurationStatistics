@@ -111,6 +111,11 @@ public class BuildDurationLogic extends BuildLogic {
                     LOGGER.log(Level.WARNING, "sum: " + sum);
                     dayDurationMetric.put(entry.getKey(), sum);
                     break;
+                case RANGE:
+                    double range = descriptiveStatistics.getMax() - descriptiveStatistics.getMin();
+                    //LOGGER.log(Level.WARNING, "range: " + range +"max"+ descriptiveStatistics.getMax() + "min" +descriptiveStatistics.getMin());
+                    dayDurationMetric.put(entry.getKey(), range);
+                    break;
                 case AVG:
                     double mean = descriptiveStatistics.getMean();
                     LOGGER.log(Level.WARNING, "mean: " + mean);
