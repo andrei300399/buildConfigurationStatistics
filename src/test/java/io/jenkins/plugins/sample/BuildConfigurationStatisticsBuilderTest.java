@@ -162,21 +162,21 @@ public class BuildConfigurationStatisticsBuilderTest {
 
     @Test
     public void testCreateDateYearMap()  {
-        HashMap<String, Double> dictDateYearZero = DateTimeHandler.createDateYearMap();
+        HashMap<String, List<Double>> dictDateYearZero = DateTimeHandler.createDateYearMap();
         assert  dictDateYearZero.size() == 12;
         assert  !dictDateYearZero.isEmpty();
-        for (Map.Entry<String, Double> entry : dictDateYearZero.entrySet()) {
-            assert entry.getValue() == 0.0;
+        for (Map.Entry<String, List<Double>> entry : dictDateYearZero.entrySet()) {
+            assert entry.getValue().isEmpty();
         }
     }
 
     @Test
     public void testCreateDateWeekMap()  {
-        HashMap<String, Double> dictDateWeekZero = DateTimeHandler.createDateWeekMap();
+        HashMap<String, List<Double>> dictDateWeekZero = DateTimeHandler.createDateWeekMap();
         assert  dictDateWeekZero.size() == 7;
         assert  !dictDateWeekZero.isEmpty();
-        for (Map.Entry<String, Double> entry : dictDateWeekZero.entrySet()) {
-            assert entry.getValue() == 0.0;
+        for (Map.Entry<String, List<Double>> entry : dictDateWeekZero.entrySet()) {
+            assert entry.getValue() .isEmpty();
         }
     }
 
@@ -242,22 +242,22 @@ public class BuildConfigurationStatisticsBuilderTest {
 
     @Test
     public void testCreateDateQuarterMap()  {
-        HashMap<String, Double> dictDateQuarterZero = DateTimeHandler.createDateQuarterMap();
+        HashMap<String, List<Double>> dictDateQuarterZero = DateTimeHandler.createDateQuarterMap();
         assert  dictDateQuarterZero.size() == 4;
         assert  !dictDateQuarterZero.isEmpty();
-        for (Map.Entry<String, Double> entry : dictDateQuarterZero.entrySet()) {
-            assert entry.getValue() == 0.0;
+        for (Map.Entry<String, List<Double>> entry : dictDateQuarterZero.entrySet()) {
+            assert entry.getValue().isEmpty();
         }
     }
 
     @Test
     public void testCreateDateDayMap() throws ParseException {
-        HashMap<String, Double> dictDateDayZero = DateTimeHandler.createDateDayMap();
+        HashMap<String, List<Double>> dictDateDayZero = DateTimeHandler.createDateDayMap();
         assert  dictDateDayZero.size() == 24;
         assert  !dictDateDayZero.isEmpty();
-        for (Map.Entry<String, Double> entry : dictDateDayZero.entrySet()) {
+        for (Map.Entry<String, List<Double>> entry : dictDateDayZero.entrySet()) {
             System.out.println(entry.getKey());
-            assert entry.getValue() == 0.0;
+            assert entry.getValue().isEmpty();
         }
     }
 }
