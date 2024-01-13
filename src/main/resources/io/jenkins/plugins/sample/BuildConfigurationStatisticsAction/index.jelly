@@ -2,6 +2,9 @@
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler" xmlns:f="/lib/form">
         <head>
                 <style>
+                        label {
+                                max-width:200px;
+                        }
                         .buildDuration, .period,
                         .successRate, .timeQueue,
                         .artifactSize, .testCount, #successRateData, #buildDurationData,
@@ -49,13 +52,11 @@
 
                         <h1>Statistics for job ${it.job.name}</h1>
 
-                        <div id="successRateData" ></div>
-                        <div id="buildDurationData" ></div>
-                        <div id="artifactSizeData" ></div>
-                        <div id="testCountData" ></div>
-                        <div id="timeQueueData" ></div>
-
-                        <st:bind var="myItem" value="${it}"/>
+                        <div id="successRateData"></div>
+                        <div id="buildDurationData"></div>
+                        <div id="artifactSizeData"></div>
+                        <div id="testCountData"></div>
+                        <div id="timeQueueData"></div>
 
                         <script id="script1">
 
@@ -76,17 +77,18 @@
                                 }
 
 
-                                myObjectBuild.getBuildDuration('MONTH', '0', '0', function(t) {
+                                myObjectBuild.getBuildDuration('MONTH', '0', 'SUM', function(t) {
                                 document.getElementById('buildDurationData').innerHTML = t.responseObject();
                                 createBuildDurationChart('MONTH');
                                 });
                                 function myCheckBuildDuration(){
                                 var strPeriod = document.getElementById("selectBuildDuration").value;
-                                var checkAverage = document.getElementById('checkboxAverageBuildDuration').checked ?  '1' : '0';
+                                var strStatistic = document.getElementById("selectStatisticBD").value;
                                 var checkFailed = document.getElementById('checkboxFailedBuildDuration').checked ?  '1' : '0';
 
                                 console.log(strPeriod, "strPeriod buildDuration");
-                                myObjectBuild.getBuildDuration(strPeriod, checkFailed, checkAverage, function(t) {
+                                console.log(strStatistic, "strStatistic buildDuration");
+                                myObjectBuild.getBuildDuration(strPeriod, checkFailed, strStatistic, function(t) {
                                 document.getElementById('buildDurationData').innerHTML = t.responseObject();
                                 createBuildDurationChart(strPeriod);
                                 });
@@ -94,17 +96,18 @@
                                 }
 
 
-                                myObjectBuild.getBuildArtifactSize('MONTH', '0', '0', function(t) {
+                                myObjectBuild.getBuildArtifactSize('MONTH', '0', 'SUM', function(t) {
                                 document.getElementById('artifactSizeData').innerHTML = t.responseObject();
                                 createArtifactSizeChart('MONTH');
                                 });
                                 function myCheckArtifactsSize(){
                                 var strPeriod = document.getElementById("selectArtifactsSize").value;
-                                var checkAverage = document.getElementById('checkboxAverageArtifactsSize').checked ?  '1' : '0';
+                                var strStatistic = document.getElementById("selectStatisticAS").value;
                                 var checkFailed = document.getElementById('checkboxFailedArtifactsSize').checked ?  '1' : '0';
 
                                 console.log(strPeriod, "strPeriod ArtifactSize");
-                                myObjectBuild.getBuildArtifactSize(strPeriod, checkFailed, checkAverage, function(t) {
+                                console.log(strStatistic, "strStatistic ArtifactSize");
+                                myObjectBuild.getBuildArtifactSize(strPeriod, checkFailed, strStatistic, function(t) {
                                 document.getElementById('artifactSizeData').innerHTML = t.responseObject();
                                 createArtifactSizeChart(strPeriod);
                                 });
@@ -112,16 +115,17 @@
                                 }
 
 
-                                myObjectBuild.getBuildTimeQueue('MONTH', '0', function(t) {
+                                myObjectBuild.getBuildTimeQueue('MONTH', 'SUM', function(t) {
                                 document.getElementById('timeQueueData').innerHTML = t.responseObject();
                                 createTimeQueueChart('MONTH');
                                 });
                                 function myCheckTimeQueue(){
                                 var strPeriod = document.getElementById("selectTimeQueue").value;
-                                var checkAverage = document.getElementById('checkboxAverageTimeQueue').checked ?  '1' : '0';
+                                var strStatistic = document.getElementById("selectStatisticTQ").value;
 
                                 console.log(strPeriod, "strPeriod TimeQueue");
-                                myObjectBuild.getBuildTimeQueue(strPeriod, checkAverage, function(t) {
+                                console.log(strStatistic, "strStatistic TimeQueue");
+                                myObjectBuild.getBuildTimeQueue(strPeriod, strStatistic, function(t) {
                                 document.getElementById('timeQueueData').innerHTML = t.responseObject();
                                 createTimeQueueChart(strPeriod);
                                 });
@@ -147,16 +151,6 @@
 
 
                         </script>
-
-                        <p class="period">WEEK</p>
-
-                        <j:forEach var="testCount" items="${it.getBuildTestCount('WEEK', '1')}">
-                                <p class="testCount">
-                                        <span class="key">${testCount.key}</span>
-                                        <span class="value">${testCount.value}</span>
-                                </p>
-                        </j:forEach>
-
 
                         <div class="graph-container">
                         <div class="graph-block">
@@ -199,8 +193,18 @@
 
                                         </label>
                                         <label>
-                                        Average:
-                                        <input type="checkbox" id="checkboxAverageBuildDuration" onchange="myCheckBuildDuration()"/>
+
+                                                Statistic:
+                                                <select id="selectStatisticBD" onchange="myCheckBuildDuration()">
+                                                        <option value="SUM">Sum</option>
+                                                        <option value="AVG">Average</option>
+                                                        <option value="MEDIAN">Median</option>
+                                                        <option value="DISPERSION">Dispersion</option>
+                                                        <option value="SD">Standard Deviation</option>
+                                                        <option value="SDUNBIASED">Standard Deviation Unbiased</option>
+                                                        <option value="MODE">Mode</option>
+                                                </select>
+
                                         </label>
                                         <label>
                                                 Show failed:
@@ -227,8 +231,18 @@
 
                                         </label>
                                         <label>
-                                                Average:
-                                                <input type="checkbox" id="checkboxAverageTimeQueue" onchange="myCheckTimeQueue()"/>
+
+                                                Statistic:
+                                                <select id="selectStatisticTQ" onchange="myCheckTimeQueue()">
+                                                        <option value="SUM">Sum</option>
+                                                        <option value="AVG">Average</option>
+                                                        <option value="MEDIAN">Median</option>
+                                                        <option value="DISPERSION">Dispersion</option>
+                                                        <option value="SD">Standard Deviation</option>
+                                                        <option value="SDUNBIASED">Standard Deviation Unbiased</option>
+                                                        <option value="MODE">Mode</option>
+                                                </select>
+
                                         </label>
 
                                 </form>
@@ -275,8 +289,18 @@
 
                                         </label>
                                         <label>
-                                                Average:
-                                                <input type="checkbox" id="checkboxAverageArtifactsSize" onchange="myCheckArtifactsSize()"/>
+
+                                                Statistic:
+                                                <select id="selectStatisticAS" onchange="myCheckArtifactsSize()">
+                                                        <option value="SUM">Sum</option>
+                                                        <option value="AVG">Average</option>
+                                                        <option value="MEDIAN">Median</option>
+                                                        <option value="DISPERSION">Dispersion</option>
+                                                        <option value="SD">Standard Deviation</option>
+                                                        <option value="SDUNBIASED">Standard Deviation Unbiased</option>
+                                                        <option value="MODE">Mode</option>
+                                                </select>
+
                                         </label>
                                         <label>
                                                 Show failed:

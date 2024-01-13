@@ -102,11 +102,11 @@ public class BuildConfigurationStatisticsBuilderTest {
     @Test
     public void testCreateDateMonthMap()  {
         int daysDate = DateTimeHandler.getLastMonthDays();
-        HashMap<String, Double> dictDateMonthZero = DateTimeHandler.createDateMonthMap();
+        HashMap<String, List<Double>> dictDateMonthZero = DateTimeHandler.createDateMonthMap();
         assert  dictDateMonthZero.size() == daysDate;
         assert  !dictDateMonthZero.isEmpty();
-        for (Map.Entry<String, Double> entry : dictDateMonthZero.entrySet()) {
-            assert entry.getValue() == 0.0;
+        for (Map.Entry<String, List<Double>> entry : dictDateMonthZero.entrySet()) {
+            assert entry.getValue().isEmpty();
         }
     }
 

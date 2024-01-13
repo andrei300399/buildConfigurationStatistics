@@ -1,12 +1,13 @@
 package io.jenkins.plugins.sample;
 
+import hudson.model.Run;
+import hudson.util.RunList;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
+import java.time.*;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,16 +74,16 @@ public class DateTimeHandler {
     }
 
     /**
-     * Create map format {23.12: 0.0, 24.12: 0.0 ...}
+     * Create map format {23.12: [], 24.12: [] ...}
      * on 30-31 days
      *
      * **/
-    public static HashMap<String, Double> createDateMonthMap() {
+    public static HashMap<String, List<Double>> createDateMonthMap() {
         ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(1);
         Logger LOGGER;
         LOGGER = Logger.getLogger(DateTimeHandler.class.getName());
         LOGGER.log(Level.INFO, "dateTime" + dateTime);
-        HashMap<String, Double> dayDuration = new HashMap<String, Double>();
+        HashMap<String, List<Double>> dayDuration = new HashMap<String, List<Double>>();
         int lenMonth = getLastMonthDays();
         LOGGER.log(Level.INFO, "lenMonth: " + lenMonth);
         for (int i = 1; i <= lenMonth; i++) {
@@ -91,8 +92,46 @@ public class DateTimeHandler {
             String strDate = dateFormat.format(
                     Date.from(dateTime.plusDays(i).toInstant()).getTime());
             LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
-            dayDuration.put(strDate, 0.0);
+            dayDuration.put(strDate, new ArrayList<Double>());
+            //dayDuration.get(strDate).add(0.0);
         }
+        LOGGER.log(Level.INFO, "dayDuration: " + dayDuration.entrySet());
+        return dayDuration;
+    }
+
+
+    /**
+     * Create map format {23.12.2023: 0.0, 24.12.2023: 0.0 ...}
+     * on 8 equal periods
+     *
+     * **/
+    public static HashMap<String, List<Double>> createDateAllMap(RunList<Run> runs) {
+        //ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(1);
+        Logger LOGGER;
+        LOGGER = Logger.getLogger(DateTimeHandler.class.getName());
+        LOGGER.log(Level.INFO, "run1" + runs.getFirstBuild());
+        LOGGER.log(Level.INFO, "run2" + runs.getLastBuild());
+        long timeStart = runs.getFirstBuild().getStartTimeInMillis();
+        long timeEnd = runs.getLastBuild().getStartTimeInMillis();
+        LocalDate startDate =
+                LocalDate.ofInstant(Instant.ofEpochMilli(timeStart),
+                        TimeZone.getDefault().toZoneId());
+        LocalDate endDate =
+                LocalDate.ofInstant(Instant.ofEpochMilli(timeEnd),
+                        TimeZone.getDefault().toZoneId());
+        Period period = Period.between(startDate, endDate);
+        LOGGER.log(Level.INFO, "period between first and last build: " + period);
+        HashMap<String, List<Double>> dayDuration = new HashMap<String, List<Double>>();
+        int lenAll = 8;
+        LOGGER.log(Level.INFO, "lenMonth: " + lenAll);
+//        for (int i = 1; i <= lenAll; i++) {
+//
+//            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//            String strDate = dateFormat.format(
+//                    Date.from(dateTime.plusDays(i).toInstant()).getTime());
+//            LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
+//            dayDuration.put(strDate, 0.0);
+//        }
         LOGGER.log(Level.INFO, "dayDuration: " + dayDuration.entrySet());
         return dayDuration;
     }
@@ -102,12 +141,12 @@ public class DateTimeHandler {
      * on 24 hours
      *
      * **/
-    public static HashMap<String, Double> createDateDayMap() throws ParseException {
+    public static HashMap<String, List<Double>> createDateDayMap() throws ParseException {
         ZonedDateTime dateTime = ZonedDateTime.now().minusHours(24);
         Logger LOGGER;
         LOGGER = Logger.getLogger(DateTimeHandler.class.getName());
         LOGGER.log(Level.INFO, "dateTime days" + dateTime);
-        HashMap<String, Double> hourDuration = new HashMap<String, Double>();
+        HashMap<String, List<Double>> hourDuration = new HashMap<String, List<Double>>();
         int lenDay = 24;
         LOGGER.log(Level.INFO, "lenDay: " + lenDay);
         for (int i = 1; i <= lenDay; i++) {
@@ -117,7 +156,8 @@ public class DateTimeHandler {
                     Date.from(dateTime.plusHours(i).toInstant()).getTime());
             strDate = DateTimeHandler.dateSetZeroMinutesSeconds(strDate);
             LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
-            hourDuration.put(strDate, 0.0);
+            hourDuration.put(strDate, new ArrayList<Double>());
+            //hourDuration.put(strDate, 0.0);
         }
         LOGGER.log(Level.INFO, "hourDuration: " + hourDuration.entrySet());
         return hourDuration;
@@ -374,10 +414,10 @@ public class DateTimeHandler {
      * on 12 month
      *
      * **/
-    public static HashMap<String, Double> createDateYearMap() {
+    public static HashMap<String, List<Double>> createDateYearMap() {
         ZonedDateTime dateTime = ZonedDateTime.now().minusYears(1);
         LOGGER.log(Level.INFO, "last year dateTime" + dateTime);
-        HashMap<String, Double> monthDuration = new HashMap<String, Double>();
+        HashMap<String, List<Double>> monthDuration = new HashMap<String, List<Double>>();
         int lengthYear = 12; // any year length in month
         LOGGER.log(Level.INFO, "lengthYear: " + lengthYear);
         for (int i = 1; i <= lengthYear; i++) {
@@ -392,7 +432,7 @@ public class DateTimeHandler {
             );
 
             LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
-            monthDuration.put(strDate, 0.0);
+            monthDuration.put(strDate, new ArrayList<Double>());
         }
         LOGGER.log(Level.INFO, "monthDuration: " + monthDuration.entrySet());
         return monthDuration;
@@ -403,10 +443,10 @@ public class DateTimeHandler {
      * on 3 month
      *
      * **/
-    public static HashMap<String, Double> createDateQuarterMap() {
+    public static HashMap<String, List<Double>> createDateQuarterMap() {
         ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(4);
         LOGGER.log(Level.INFO, "last quarter dateTime" + dateTime);
-        HashMap<String, Double> quarterDuration = new HashMap<String, Double>();
+        HashMap<String, List<Double>> quarterDuration = new HashMap<String, List<Double>>();
         int lengthQuarter = 4; // any year length in month
         LOGGER.log(Level.INFO, "lengthQuarter: " + lengthQuarter);
         for (int i = 1; i <= lengthQuarter; i++) {
@@ -421,7 +461,7 @@ public class DateTimeHandler {
             );
 
             LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
-            quarterDuration.put(strDate, 0.0);
+            quarterDuration.put(strDate, new ArrayList<Double>());
         }
         LOGGER.log(Level.INFO, "quarterDuration: " + quarterDuration.entrySet());
         return quarterDuration;
@@ -432,10 +472,10 @@ public class DateTimeHandler {
      * on 1 week
      *
      * **/
-    public static HashMap<String, Double> createDateWeekMap() {
+    public static HashMap<String, List<Double>> createDateWeekMap() {
         ZonedDateTime dateTime = ZonedDateTime.now().minusWeeks(1);
         LOGGER.log(Level.INFO, "last week dateTime duration" + dateTime);
-        HashMap<String, Double> weekDuration = new HashMap<String, Double>();
+        HashMap<String, List<Double>> weekDuration = new HashMap<String, List<Double>>();
         int lengthWeek = 7; // any week length in days
         LOGGER.log(Level.INFO, "lengthWeek: " + lengthWeek);
         for (int i = 1; i <= lengthWeek; i++) {
@@ -450,7 +490,7 @@ public class DateTimeHandler {
             );
 
             LOGGER.log(Level.INFO, "strdate i: " + i + " - " + strDate);
-            weekDuration.put(strDate, 0.0);
+            weekDuration.put(strDate, new ArrayList<Double>());
         }
         LOGGER.log(Level.INFO, "weekDuration: " + weekDuration.entrySet());
         return weekDuration;

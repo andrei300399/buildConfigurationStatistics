@@ -38,16 +38,17 @@ public class BuildConfigurationStatisticsAction implements Action {
     }
 
     @JavaScriptMethod
-    public String getBuildDuration(String period, String fail, String average) throws ParseException {
+    public String getBuildDuration(String period, String fail, String statistics) throws ParseException {
         Logger LOGGER = Logger.getLogger("uuu");
         LOGGER.log(Level.INFO, "arg jelly: " + period);
         LOGGER.log(Level.INFO, "failed status: " + fail);
-        LOGGER.log(Level.INFO, "avg status: " + average);
+        LOGGER.log(Level.INFO, "statistics status: " + statistics);
         IntervalDate intreval = IntervalDate.valueOf(period);
+        Statistics statisticsEnum = Statistics.valueOf(statistics);
         Boolean failed = fail.equals("1");
-        Boolean averageTime = average.equals("1");
+        //Boolean averageTime = average.equals("1");
         Gson gson = new Gson();
-        Map<String, Double> map = new BuildDurationLogic(intreval, failed,job.getBuilds()).getBuildsDuration(averageTime);
+        Map<String, Double> map = new BuildDurationLogic(intreval, failed,job.getBuilds()).getBuildsDuration(statisticsEnum);
          String gsonData = gson.toJson(map);
         LOGGER.log(Level.INFO, "gson: " + gsonData);
         return gsonData;
@@ -65,17 +66,18 @@ public class BuildConfigurationStatisticsAction implements Action {
     }
 
     @JavaScriptMethod
-    public String getBuildArtifactSize(String period, String fail, String average) throws ParseException {
+    public String getBuildArtifactSize(String period, String fail, String statistics) throws ParseException {
         Logger LOGGER = Logger.getLogger("artifact");
         LOGGER.log(Level.INFO, "arg jelly artifact: " + period);
         LOGGER.log(Level.INFO, "failed artifact: " + fail);
-        LOGGER.log(Level.INFO, "avg artifact: " + average);
+        LOGGER.log(Level.INFO, "statistics artifact: " + statistics);
         IntervalDate intreval = IntervalDate.valueOf(period);
+        Statistics statisticsEnum = Statistics.valueOf(statistics);
         Boolean failed = fail.equals("1");
-        Boolean averageTime = average.equals("1");
+//        Boolean averageTime = average.equals("1");
 
         Gson gson = new Gson();
-        Map<String, Double> map = new BuildArtifactSizeLogic(intreval, failed, job.getBuilds()).getArtifactSize(averageTime);
+        Map<String, Double> map = new BuildArtifactSizeLogic(intreval, failed, job.getBuilds()).getArtifactSize(statisticsEnum);
         String gsonData = gson.toJson(map);
         LOGGER.log(Level.INFO, "gson artifact: " + gsonData);
         return gsonData;
@@ -97,15 +99,16 @@ public class BuildConfigurationStatisticsAction implements Action {
     }
 
     @JavaScriptMethod
-    public String getBuildTimeQueue(String period, String average) throws ParseException {
+    public String getBuildTimeQueue(String period, String statistics) throws ParseException {
         Logger LOGGER = Logger.getLogger("queue");
         LOGGER.log(Level.INFO, "arg jelly queue: " + period);
-        LOGGER.log(Level.INFO, "avg queue: " + average);
+        LOGGER.log(Level.INFO, "statistics queue: " + statistics);
         IntervalDate intreval = IntervalDate.valueOf(period);
-        Boolean averageTime = average.equals("1");
+        Statistics statisticsEnum = Statistics.valueOf(statistics);
+//        Boolean averageTime = average.equals("1");
 
         Gson gson = new Gson();
-        Map<String, Double> map = new BuildTimeQueueLogic(intreval, job.getBuilds()).getTimeQueue(averageTime);
+        Map<String, Double> map = new BuildTimeQueueLogic(intreval, job.getBuilds()).getTimeQueue(statisticsEnum);
         String gsonData = gson.toJson(map);
         LOGGER.log(Level.INFO, "gson TimeQueue: " + gsonData);
         return gsonData;
