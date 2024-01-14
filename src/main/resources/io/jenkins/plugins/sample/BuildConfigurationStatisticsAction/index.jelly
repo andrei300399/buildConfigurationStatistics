@@ -64,14 +64,16 @@
 
                                 myObjectBuild.getBuildSuccessRate('MONTH', function(t) {
                                 document.getElementById('successRateData').innerHTML = t.responseObject();
-                                createSuccessRateChart('MONTH');
+                                createSuccessRateChart();
                                 });
                                 function myCheckSuccess(){
                                 var strPeriod = document.getElementById("selectSuccess").value;
+                                var typeChart = document.getElementById("selectChartAS").value;
                                 console.log(strPeriod, "Day");
+                                console.log(typeChart, "typeChart");
                                 myObjectBuild.getBuildSuccessRate(strPeriod, function(t) {
                                 document.getElementById('successRateData').innerHTML = t.responseObject();
-                                createSuccessRateChart(strPeriod);
+                                createSuccessRateChart();
                                 });
 
                                 }
@@ -79,7 +81,7 @@
 
                                 myObjectBuild.getBuildDuration('MONTH', '0', 'SUM', function(t) {
                                 document.getElementById('buildDurationData').innerHTML = t.responseObject();
-                                createBuildDurationChart('MONTH');
+                                createBuildDurationChart();
                                 });
                                 function myCheckBuildDuration(){
                                 var strPeriod = document.getElementById("selectBuildDuration").value;
@@ -90,7 +92,7 @@
                                 console.log(strStatistic, "strStatistic buildDuration");
                                 myObjectBuild.getBuildDuration(strPeriod, checkFailed, strStatistic, function(t) {
                                 document.getElementById('buildDurationData').innerHTML = t.responseObject();
-                                createBuildDurationChart(strPeriod);
+                                createBuildDurationChart();
                                 });
 
                                 }
@@ -98,7 +100,7 @@
 
                                 myObjectBuild.getBuildArtifactSize('MONTH', '0', 'SUM', function(t) {
                                 document.getElementById('artifactSizeData').innerHTML = t.responseObject();
-                                createArtifactSizeChart('MONTH');
+                                createArtifactSizeChart();
                                 });
                                 function myCheckArtifactsSize(){
                                 var strPeriod = document.getElementById("selectArtifactsSize").value;
@@ -109,7 +111,7 @@
                                 console.log(strStatistic, "strStatistic ArtifactSize");
                                 myObjectBuild.getBuildArtifactSize(strPeriod, checkFailed, strStatistic, function(t) {
                                 document.getElementById('artifactSizeData').innerHTML = t.responseObject();
-                                createArtifactSizeChart(strPeriod);
+                                createArtifactSizeChart();
                                 });
 
                                 }
@@ -117,7 +119,7 @@
 
                                 myObjectBuild.getBuildTimeQueue('MONTH', 'SUM', function(t) {
                                 document.getElementById('timeQueueData').innerHTML = t.responseObject();
-                                createTimeQueueChart('MONTH');
+                                createTimeQueueChart();
                                 });
                                 function myCheckTimeQueue(){
                                 var strPeriod = document.getElementById("selectTimeQueue").value;
@@ -127,14 +129,14 @@
                                 console.log(strStatistic, "strStatistic TimeQueue");
                                 myObjectBuild.getBuildTimeQueue(strPeriod, strStatistic, function(t) {
                                 document.getElementById('timeQueueData').innerHTML = t.responseObject();
-                                createTimeQueueChart(strPeriod);
+                                createTimeQueueChart();
                                 });
 
                                 }
 
                                 myObjectBuild.getBuildTestCount('MONTH', '0', function(t) {
                                 document.getElementById('testCountData').innerHTML = t.responseObject();
-                                createTestCountChart('MONTH');
+                                createTestCountChart();
                                 });
                                 function myCheckTestCount(){
                                 var strPeriod = document.getElementById("selectTestCount").value;
@@ -143,7 +145,7 @@
                                 console.log(strPeriod, "strPeriod TestCount");
                                 myObjectBuild.getBuildTestCount(strPeriod, checkFailed, function(t) {
                                 document.getElementById('testCountData').innerHTML = t.responseObject();
-                                createTestCountChart(strPeriod);
+                                createTestCountChart();
                                 });
 
                                 }
@@ -158,6 +160,16 @@
                                 <canvas id="successRateChart" width="90" height="25"></canvas>
                                 </div>
                                 <form class="settings">
+                                        <label>
+
+                                                Type chart:
+                                                <select id="selectChartSR" onchange="createSuccessRateChart()">
+                                                        <option value="Bar">Bar</option>
+                                                        <option value="Line">Line trend</option>
+                                                        <option value="Scatter">Scatter</option>
+                                                </select>
+
+                                        </label>
                                         <label>
                                                 Range:
                                                 <select id="selectSuccess" onchange="myCheckSuccess()">
@@ -178,6 +190,16 @@
                                 <canvas id="buildDurationChart" width="90" height="25"></canvas>
                                 </div>
                                 <form class="settings">
+                                        <label>
+
+                                                Type chart:
+                                                <select id="selectChartBD" onchange="createBuildDurationChart()()">
+                                                        <option value="Bar">Bar</option>
+                                                        <option value="Line">Line trend</option>
+                                                        <option value="Scatter">Scatter</option>
+                                                </select>
+
+                                        </label>
                                         <label>
                                                 Range:
                                                 <select id="selectBuildDuration" onchange="myCheckBuildDuration()">
@@ -220,6 +242,16 @@
                                 </div>
                                 <form class="settings">
                                         <label>
+
+                                                Type chart:
+                                                <select id="selectChartTQ" onchange="createTimeQueueChart()">
+                                                        <option value="Bar">Bar</option>
+                                                        <option value="Line">Line trend</option>
+                                                        <option value="Scatter">Scatter</option>
+                                                </select>
+
+                                        </label>
+                                        <label>
                                                 Range:
                                                 <select id="selectTimeQueue" onchange="myCheckTimeQueue()">
                                                         <option value="MONTH">Month</option>
@@ -254,6 +286,17 @@
                                 <canvas id="testCount" width="90" height="25"></canvas>
                                 </div>
                                 <form class="settings">
+
+                                        <label>
+
+                                                Type chart:
+                                                <select id="selectChartTC" onchange="createTestCountChart()">
+                                                        <option value="Bar">Bar</option>
+                                                        <option value="Line">Line trend</option>
+                                                        <option value="Scatter">Scatter</option>
+                                                </select>
+
+                                        </label>
                                         <label>
                                                 Range:
                                                 <select id="selectTestCount" onchange="myCheckTestCount()">
@@ -278,6 +321,16 @@
                                 <canvas id="artifactsSize" width="90" height="25"></canvas>
                                 </div>
                                 <form class="settings">
+                                        <label>
+
+                                                Type chart:
+                                                <select id="selectChartAS" onchange="createArtifactSizeChart()">
+                                                        <option value="Bar">Bar</option>
+                                                        <option value="Line">Line trend</option>
+                                                        <option value="Scatter">Scatter</option>
+                                                </select>
+
+                                        </label>
                                         <label>
                                                 Range:
                                                 <select id="selectArtifactsSize" onchange="myCheckArtifactsSize()">
