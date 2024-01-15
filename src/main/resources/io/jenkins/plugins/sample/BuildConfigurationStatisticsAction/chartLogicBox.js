@@ -39,7 +39,21 @@ function typeChartHandler(typeChart, labels, title, dictValues){
                                           y: {
                                             beginAtZero: true
                                           }
-                                        }
+                                        },
+                                    plugins: {
+                                                legend: {
+                                                    display: true,
+                                                    labels: {
+                                                        //color: 'rgb(255, 99, 132)',
+                                                         font: {
+                                                            size: 16,
+                                                            weight: 'bold'
+                                                         }
+                                                    },
+
+                                                }
+                                            }
+
                                 }
                               };
 
@@ -61,6 +75,21 @@ function typeChartHandler(typeChart, labels, title, dictValues){
       allPerf = {
                               type: 'line',
                               data: data,
+                              options: {
+                                      plugins: {
+                                                                                      legend: {
+                                                                                          display: true,
+                                                                                          labels: {
+                                                                                              //color: 'rgb(255, 99, 132)',
+                                                                                               font: {
+                                                                                                  size: 16,
+                                                                                                  weight: 'bold'
+                                                                                               }
+                                                                                          },
+
+                                                                                      }
+                                                                                  }
+                                  }
 
                             };
 
@@ -89,6 +118,19 @@ function typeChartHandler(typeChart, labels, title, dictValues){
                                                      scale: {
                                                          min: 0
                                                      },
+                                     plugins: {
+                                                                                     legend: {
+                                                                                         display: true,
+                                                                                         labels: {
+                                                                                             //color: 'rgb(255, 99, 132)',
+                                                                                              font: {
+                                                                                                 size: 16,
+                                                                                                 weight: 'bold'
+                                                                                              }
+                                                                                         },
+
+                                                                                     }
+                                                                                 }
                                                  },
                                   };
 

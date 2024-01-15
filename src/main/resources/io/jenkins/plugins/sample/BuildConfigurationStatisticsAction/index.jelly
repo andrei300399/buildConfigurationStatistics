@@ -13,7 +13,7 @@
                                 display:none;
                         }
                         .graph-container {
-                        width: 90%;
+                        width: 95%;
 
                         }
                         .graph-block{
@@ -29,7 +29,7 @@
                         }
                         .settings{
                         padding: 5px;
-
+                        width:210px;
                         margin: 10px;
                         display: flex;
                         flex-direction: column;
