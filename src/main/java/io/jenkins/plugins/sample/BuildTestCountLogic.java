@@ -3,9 +3,12 @@ package io.jenkins.plugins.sample;
 import hudson.model.AbstractProject;
 import hudson.model.Result;
 import hudson.model.Run;
+import hudson.tasks.test.AbstractTestResultAction;
+import hudson.tasks.test.AggregatedTestResultAction;
 import hudson.util.RunList;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,9 +68,9 @@ public class BuildTestCountLogic extends BuildLogic {
                 dateFormatKeyAfterCheckPeriod = DateTimeHandler.dateSetZeroMinutesSeconds(dateFormatKeyAfterCheckPeriod);
                 LOGGER.log(Level.INFO, "dateFormatKeyAfterCheckPeriod for day zero: " + dateFormatKeyAfterCheckPeriod);
             }
-            if (testCountOnFormatDate.get(dateFormatKeyAfterCheckPeriod) == 0.0) {
+            if (testCountOnFormatDate.get(dateFormatKeyAfterCheckPeriod) == 0) {
                 testCountOnFormatDate.put(dateFormatKeyAfterCheckPeriod, getTestCountForRun(run));
-                LOGGER.log(Level.WARNING, "getDuration: " + run.getDuration());
+                LOGGER.log(Level.WARNING, "getTestCountForRun: " + getTestCountForRun(run));
 
             } else {
                 testCountOnFormatDate.put(dateFormatKeyAfterCheckPeriod, testCountOnFormatDate.get(dateFormatKeyAfterCheckPeriod) + getTestCountForRun(run));
@@ -80,10 +83,16 @@ public class BuildTestCountLogic extends BuildLogic {
 
     public int getTestCountForRun(Run run) {
         int testCount = 0;
-        //TestResultAction testResultAction = run.getAction(TestResultAction.class);
-//            if (testResultAction != null) {
-//                return testResultAction.getTotalCount();
-//            }
+        List<AbstractTestResultAction> testActions = run.getActions(AbstractTestResultAction.class);
+        for (AbstractTestResultAction testAction : testActions) {
+            LOGGER.log(Level.INFO, "testAction: " + testAction);
+            LOGGER.log(Level.INFO, "getPassedTests: " + testAction.getPassedTests());
+            LOGGER.log(Level.INFO, "getPassedTests: " + testAction.getPassedTests().size());
+            LOGGER.log(Level.INFO, "getFailedTests: " + testAction.getFailedTests());
+            testCount+=testAction.getPassedTests().size();
+
+        }
+
         return testCount;
 
     }

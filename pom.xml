@@ -93,6 +93,10 @@
       <artifactId>commons-math3</artifactId>
       <version>3.6.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.jvnet.hudson.main</groupId>-->
 <!--      <artifactId>hudson-core</artifactId>-->
