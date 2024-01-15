@@ -166,7 +166,7 @@
                                                 <select id="selectChartSR" onchange="createSuccessRateChart()">
                                                         <option value="Bar">Bar</option>
                                                         <option value="Line">Line trend</option>
-                                                        <option value="Scatter">Scatter</option>
+                                                        <option value="Radar">Radar</option>
                                                 </select>
 
                                         </label>
@@ -196,7 +196,7 @@
                                                 <select id="selectChartBD" onchange="createBuildDurationChart()()">
                                                         <option value="Bar">Bar</option>
                                                         <option value="Line">Line trend</option>
-                                                        <option value="Scatter">Scatter</option>
+                                                        <option value="Radar">Radar</option>
                                                 </select>
 
                                         </label>
@@ -247,7 +247,7 @@
                                                 <select id="selectChartTQ" onchange="createTimeQueueChart()">
                                                         <option value="Bar">Bar</option>
                                                         <option value="Line">Line trend</option>
-                                                        <option value="Scatter">Scatter</option>
+                                                        <option value="Radar">Radar</option>
                                                 </select>
 
                                         </label>
@@ -293,7 +293,7 @@
                                                 <select id="selectChartTC" onchange="createTestCountChart()">
                                                         <option value="Bar">Bar</option>
                                                         <option value="Line">Line trend</option>
-                                                        <option value="Scatter">Scatter</option>
+                                                        <option value="Radar">Radar</option>
                                                 </select>
 
                                         </label>
@@ -327,7 +327,7 @@
                                                 <select id="selectChartAS" onchange="createArtifactSizeChart()">
                                                         <option value="Bar">Bar</option>
                                                         <option value="Line">Line trend</option>
-                                                        <option value="Scatter">Scatter</option>
+                                                        <option value="Radar">Radar</option>
                                                 </select>
 
                                         </label>

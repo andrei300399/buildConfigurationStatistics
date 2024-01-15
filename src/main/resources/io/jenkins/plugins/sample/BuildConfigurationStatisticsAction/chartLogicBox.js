@@ -67,7 +67,7 @@ function typeChartHandler(typeChart, labels, title, dictValues){
 
       break;
 
-      case 'Scatter':
+      case 'Radar':
 
             data = {
               labels: labels,
