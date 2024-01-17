@@ -96,6 +96,19 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>junit</artifactId>
+
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.24.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.2.0</version>
+      <scope>test</scope>
     </dependency>
 <!--    <dependency>-->
 <!--      <groupId>org.jvnet.hudson.main</groupId>-->
@@ -124,10 +137,6 @@
       <id>repo.jenkins-ci.org</id>
       <url>https://repo.jenkins-ci.org/public/</url>
     </repository>
-    <repository>
-      <id>???</id>
-      <url>???</url>
-    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
@@ -142,5 +151,6 @@
         <directory>src/main/resources</directory>
       </resource>
     </resources>
+
   </build>
 </project>
