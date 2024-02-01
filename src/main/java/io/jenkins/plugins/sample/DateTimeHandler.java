@@ -19,6 +19,15 @@ public class DateTimeHandler {
         Date date = new Date(time);
         return date;
     }
+
+    public static Date convertStringToDate(String dateString, String format) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        Date date = formatter.parse(dateString);
+        return date;
+    }
+
+
+
     /*
      * date format = yyyy MM dd HH:mm:ss
      *

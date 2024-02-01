@@ -150,6 +150,15 @@
 
                                 }
 
+                                function getPredictedBD(){
+
+                                var strPeriod = document.getElementById("selectBuildDuration").value;
+                                myObjectBuild.getPredicted(strPeriod, function(t) {
+                                document.getElementById('predictedBD').innerHTML = t.responseObject();
+                                });
+
+                                }
+
 
 
                         </script>
@@ -233,6 +242,18 @@
                                                 Show failed:
                                                 <input type="checkbox" id="checkboxFailedBuildDuration" onchange="myCheckBuildDuration()"/>
                                         </label>
+                                        <div class="predict">
+<!--                                                <label>-->
+<!--                                                        Predict next value:-->
+<!--                                                        <input type="button" id="buttonBuildDuration"/>-->
+<!--                                                </label>-->
+                                                <button type="button" onclick="getPredictedBD()"> Predict next value</button>
+                                                <div>
+                                                     Predicted value: <span id="predictedBD">19.8</span>
+                                                </div>
+
+                                        </div>
+
 
                                 </form>
                         </div>

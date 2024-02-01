@@ -36,7 +36,8 @@ public class BuildLogic {
                 });
                 break;
             case YEAR:
-                Date dateYear = Date.from(ZonedDateTime.now().minusYears(1).toInstant());
+                Date dateYear = Date.from(ZonedDateTime.now().minusYears(1).plusMonths(1).toInstant());
+                LOGGER.log(Level.WARNING, "dateYear: " + dateYear);
                 this.buildList = buildList.filter(run -> {
                     try {
                         return run.getStartTimeInMillis() >= DateTimeHandler.convertDateToLongTime(dateYear);
