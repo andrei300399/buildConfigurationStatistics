@@ -153,8 +153,17 @@
                                 function getPredictedBD(){
 
                                 var strPeriod = document.getElementById("selectBuildDuration").value;
-                                myObjectBuild.getPredicted(strPeriod, function(t) {
+                                myObjectBuild.getPredicted(strPeriod, "BD", function(t) {
                                 document.getElementById('predictedBD').innerHTML = t.responseObject();
+                                });
+
+                                }
+
+                                function getPredictedAS(){
+
+                                var strPeriod = document.getElementById("selectArtifactsSize").value;
+                                myObjectBuild.getPredicted(strPeriod, "AS", function(t) {
+                                document.getElementById('predictedAS').innerHTML = t.responseObject();
                                 });
 
                                 }
@@ -243,10 +252,7 @@
                                                 <input type="checkbox" id="checkboxFailedBuildDuration" onchange="myCheckBuildDuration()"/>
                                         </label>
                                         <div class="predict">
-<!--                                                <label>-->
-<!--                                                        Predict next value:-->
-<!--                                                        <input type="button" id="buttonBuildDuration"/>-->
-<!--                                                </label>-->
+
                                                 <button type="button" onclick="getPredictedBD()"> Predict next value</button>
                                                 <div>
                                                      Predicted value: <span id="predictedBD">19.8</span>
@@ -383,6 +389,14 @@
                                                 Show failed:
                                                 <input type="checkbox" id="checkboxFailedArtifactsSize" onchange="myCheckArtifactsSize()"/>
                                         </label>
+                                        <div class="predict">
+
+                                                <button type="button" onclick="getPredictedAS()"> Predict next value</button>
+                                                <div>
+                                                        Predicted value: <span id="predictedAS">19.8</span>
+                                                </div>
+
+                                        </div>
 
                                 </form>
                         </div>

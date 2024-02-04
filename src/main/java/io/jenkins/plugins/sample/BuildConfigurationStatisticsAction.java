@@ -5,6 +5,8 @@ import hudson.model.Action;
 import hudson.model.Job;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
@@ -117,11 +119,19 @@ public class BuildConfigurationStatisticsAction implements Action {
     }
 
     @JavaScriptMethod
-    public double getPredicted(String period) throws ParseException {
+    public double getPredicted(String period, String metric) throws ParseException {
         Logger LOGGER = Logger.getLogger("getPredicted");
         LOGGER.log(Level.INFO, "getPredicted period: " + period);
         IntervalDate intreval = IntervalDate.valueOf(period);
-        Map<String, Double> map = new BuildDurationLogic(intreval, true,job.getBuilds()).getBuildsDuration(Statistics.AVG);
+        Map<String, Double> map;
+
+        if (metric.equals("BD")) {
+            map = new BuildDurationLogic(intreval, true,job.getBuilds()).getBuildsDuration(Statistics.AVG);
+        } else {
+            map = new BuildArtifactSizeLogic(intreval, true,job.getBuilds()).getArtifactSize(Statistics.AVG);
+        }
+
+
         String formatDate;
 
         Map<Long, Double> newMap = new HashMap<Long, Double>();
@@ -165,6 +175,15 @@ public class BuildConfigurationStatisticsAction implements Action {
         LOGGER.log(Level.INFO, "arrWeights: " + Arrays.toString(arrWeights));
         LOGGER.log(Level.INFO, "listValuesMetric: " + Arrays.toString(listValuesMetric));
         double predictedNextValue = LinearRegressionHandler.linearRegression(listValuesMetric, arrWeights);
+
+        DecimalFormatSymbols separator = new DecimalFormatSymbols();
+        separator.setDecimalSeparator('.');
+
+        DecimalFormat df = new DecimalFormat("#.##", separator);
+        
+        LOGGER.log(Level.INFO, "predictedNextValue format: " + df.format(predictedNextValue));
+        predictedNextValue = Double.valueOf(df.format(predictedNextValue));
+
         return predictedNextValue;
 
     }
