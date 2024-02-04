@@ -82,6 +82,16 @@ public class DateTimeHandler {
         return dateToString(cal.getTime(), "yyyy-MM-dd HH:mm:ss");
     }
 
+    public static String dateSetZeroDay(String dateString) throws ParseException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        Date date = sdf.parse(dateString);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        return dateToString(cal.getTime(), "yyyy-MM-dd");
+    }
+
     /**
      * Create map format {23.12: [], 24.12: [] ...}
      * on 30-31 days

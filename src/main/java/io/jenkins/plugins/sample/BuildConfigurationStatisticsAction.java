@@ -6,10 +6,7 @@ import hudson.model.Job;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -125,23 +122,50 @@ public class BuildConfigurationStatisticsAction implements Action {
         LOGGER.log(Level.INFO, "getPredicted period: " + period);
         IntervalDate intreval = IntervalDate.valueOf(period);
         Map<String, Double> map = new BuildDurationLogic(intreval, true,job.getBuilds()).getBuildsDuration(Statistics.AVG);
+        String formatDate;
 
         Map<Long, Double> newMap = new HashMap<Long, Double>();
         for(Map.Entry<String, Double> entry : map.entrySet()) {
             //LOGGER.log(Level.INFO, "map entrySet: " + map.entrySet());
             LOGGER.log(Level.INFO, "entrySet: " + entry.getKey() + " - " + entry.getValue());
-            LOGGER.log(Level.INFO, "string date: " + DateTimeHandler.convertStringToDate(entry.getKey(), "YYYY-MM-DD"));
-            LOGGER.log(Level.INFO, "long time: " + DateTimeHandler.convertDateToLongTime(DateTimeHandler.convertStringToDate(entry.getKey(), "YYYY-MM")));
-            newMap.put(DateTimeHandler.convertDateToLongTime(DateTimeHandler.convertStringToDate(entry.getKey(), "YYYY-MM")), entry.getValue());
+            LOGGER.log(Level.INFO, "string date zero: " + DateTimeHandler.dateSetZeroDay(entry.getKey()));
+            String parsedDate;
+            if (intreval == IntervalDate.YEAR || intreval == IntervalDate.QUARTER) {
+                parsedDate = DateTimeHandler.dateSetZeroDay(entry.getKey());
+                formatDate = "yyyy-MM-dd";
+            } else if (intreval == IntervalDate.DAY){
+                parsedDate = entry.getKey();
+                formatDate = "yyyy-MM-dd HH";
+            }
+            else {
+                parsedDate = entry.getKey();
+                formatDate = "yyyy-MM-dd";
+            }
+
+            LOGGER.log(Level.INFO, "string date: " + DateTimeHandler.convertStringToDate(parsedDate, formatDate));
+            LOGGER.log(Level.INFO, "long time: " + DateTimeHandler.convertDateToLongTime(DateTimeHandler.convertStringToDate(parsedDate, formatDate)));
+            newMap.put(DateTimeHandler.convertDateToLongTime(DateTimeHandler.convertStringToDate(parsedDate, formatDate)), entry.getValue());
         }
         LOGGER.log(Level.INFO, "newMap: " + newMap.keySet());
         SortedSet<Long> keys = new TreeSet<>(newMap.keySet());
+        double[] listValuesMetric = new double[keys.size()];
+
+        int i = 0;
         for (Long key : keys) {
             Double value = newMap.get(key);
             LOGGER.log(Level.INFO, "sorted key and value: " + key + " - " + value);
             // do something
+            listValuesMetric[i] = value;
+            LOGGER.log(Level.INFO, "listValuesMetric[i]: " + listValuesMetric[i]);
+            LOGGER.log(Level.INFO, "listValuesMetric: " + Arrays.toString(listValuesMetric));
+            i++;
         }
-        return 19.4;
+        LOGGER.log(Level.INFO, "listValuesMetric: " + Arrays.toString(listValuesMetric));
+        double[] arrWeights = LinearRegressionHandler.calculateWeightMetric(listValuesMetric);
+        LOGGER.log(Level.INFO, "arrWeights: " + Arrays.toString(arrWeights));
+        LOGGER.log(Level.INFO, "listValuesMetric: " + Arrays.toString(listValuesMetric));
+        double predictedNextValue = LinearRegressionHandler.linearRegression(listValuesMetric, arrWeights);
+        return predictedNextValue;
 
     }
 }

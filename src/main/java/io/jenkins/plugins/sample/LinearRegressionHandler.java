@@ -5,17 +5,27 @@ import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public  class LinearRegressionHandler {
 
-    static void linearRegression(double[] xUnweighted, double[] yUnweighted, double[] weights) {
+    static Logger LOGGER = Logger.getLogger(LinearRegressionHandler.class.getName());
+
+    static double linearRegression(double[] yUnweighted, double[] weights) {
+
+
         double[] y = new double[yUnweighted.length];
-        double[][] x = new double[xUnweighted.length][2];
+        double[][] x = new double[yUnweighted.length][2];
 
         for (int i = 0; i < y.length; i++) {
+            LOGGER.log(Level.INFO, "yUnweighted i: " + yUnweighted[i]);
+            LOGGER.log(Level.INFO, "weights i: " + weights[i]);
             y[i] = Math.sqrt(weights[i]) * yUnweighted[i];
-            x[i][0] = Math.sqrt(weights[i]) * xUnweighted[i];
+            x[i][0] = Math.sqrt(weights[i]) * i + 1;
             x[i][1] = Math.sqrt(weights[i]);
+            LOGGER.log(Level.INFO, "y[i]: " +y[i]);
+            LOGGER.log(Level.INFO, "x[i][0]: " + x[i][0]);
         }
 
         OLSMultipleLinearRegression regression = new OLSMultipleLinearRegression();
@@ -26,31 +36,30 @@ public  class LinearRegressionHandler {
         double slope = regressionParameters[0];
         double intercept = regressionParameters[1];
 
-        System.out.println("y = " + slope + "*x + " + intercept);
-
-        System.out.println("predicted = " + (slope * 13 + intercept));
+        double predictedValue = slope * (yUnweighted.length + 1)+ intercept;
+        LOGGER.log(Level.INFO, "y = " + slope + "*x + " + intercept);
+        LOGGER.log(Level.INFO, "predicted = " + predictedValue);
+        return predictedValue;
     }
 
-//    public static void main(String[] args) {
-//        // Исторические данные по продажам за последние 12 месяцев
-////        {"2023-10":,"2023-11":0.0,"2023-12":,"2024-01":,"2023-02":,"2023-03":,"2023-04":,"2023-05":,"2023-06":,"2023-07":,"2023-08":,"2023-09":}
-//        double[] sales = {17.8855, 18.404, 18.5965, 18.661, 18.917, 19.393, 18.3285, 19.744999999999997, 20.993499999999997, 0, 21.842, 23.529};
-//        double[] sales2 = {1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1};//{0.4, 0.5, 0.5, 0.6, 0.6, 0.7, 0.7, 0.8, 0.8, 0, 0.9, 1};
-//        double[] withoutW = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-//        double[] sales3 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-//        linearRegressionW(sales3, sales, sales2);
-//        // Создаем объект модели и обучаем ее на данных
-//        SimpleRegression model = new SimpleRegression(false);
-//        for (int i = 0; i < sales.length; i++) {
-//            //model.addObservation(i + 1, sales[i + 1], sales2[]);
-//            model.addData(sales3[i] , sales[i]);// * Math.sqrt(sales2[i]));
-//            //System.out.println(i  + " - "+ sales[i]);
-//        }
-//
-//        // Предсказываем значения для следующего месяца
-//        double nextMonthSales = model.predict(sales.length + 1);
-//        System.out.println("next: " + (sales.length + 1));
-//        System.out.println("Продажи на следующий месяц: " + nextMonthSales);
-//    }
+    public static double[] calculateWeightMetric(double[] arrMetricValues) {
+        LOGGER.log(Level.INFO, "arrMetricValues: " + Arrays.toString(arrMetricValues));
+        double averageMetric = Arrays.stream(arrMetricValues).average().orElse(Double.NaN);
+        LOGGER.log(Level.INFO, "averageMetric: " + averageMetric);
+        double initialWeight = 1.0;
+        double stepWeight = initialWeight/(arrMetricValues.length *2);
+        double[] arrWeights = new double[arrMetricValues.length];
+        LOGGER.log(Level.INFO, "stepWeight: " + stepWeight);
+        for (int i = arrMetricValues.length - 1; i >= 0; i--) {
+            if (arrMetricValues[i] < 0.5 * averageMetric) {
+                arrWeights[i] = 0;
+            } else {
+                arrWeights[i] = initialWeight;
+            }
+
+            initialWeight-=stepWeight;
+        }
+        return arrWeights;
+    }
 
 }
