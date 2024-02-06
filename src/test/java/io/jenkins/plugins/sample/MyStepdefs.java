@@ -1,5 +1,6 @@
 package io.jenkins.plugins.sample;
-
+import io.cucumber.java.Before;
+import io.cucumber.java.ru.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import hudson.model.*;
@@ -7,42 +8,38 @@ import hudson.tasks.Shell;
 import hudson.util.RunList;
 import org.apache.commons.lang.time.DateUtils;
 import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoRule;
 
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@RunWith(MockitoJUnitRunner.Silent.class)
-public class BuildConfigurationStatisticsBDDTest {
 
-    @Mock
-    Job job;
+public class MyStepdefs {
 
-    @Mock
-    FreeStyleBuild build;
 
-    @Mock
-    FreeStyleBuild build2;
+    //@Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    @Mock
-    FreeStyleBuild build3;
+    Job job = mock(Job.class);
 
-    @Mock
-    FreeStyleBuild build4;
+    FreeStyleBuild build = mock(FreeStyleBuild.class);
+    FreeStyleBuild build2 = mock(FreeStyleBuild.class);
+    FreeStyleBuild build3 = mock(FreeStyleBuild.class);
+    FreeStyleBuild build4 = mock(FreeStyleBuild.class);
 
 
 //    RunList<Run> buildList;
@@ -65,9 +62,12 @@ public class BuildConfigurationStatisticsBDDTest {
     String formatFiveMonthAgoQuarter;
     String formatTwoWeekAgo;
 
+    Map<String, Double> map;
+
 
     @Before
-    public void setup() throws ParseException {
+    public void prepareData() throws ParseException {
+        //подготовить данные
         now = new Date();
         twoMonthAgo = DateUtils.addMonths(now, -2);
         fiveMonthAgo = DateUtils.addMonths(now, -5);
@@ -112,23 +112,24 @@ public class BuildConfigurationStatisticsBDDTest {
 
         given(build4.getResult())
                 .willReturn(Result.SUCCESS);
-
-
     }
 
-    @Test
-    public void testGetBuildsDuration() throws ParseException {
+    @Дано("^выбраны параметры отображения за период \"([^\"]*)\" и с флагом отображения упавших сборок \"([^\"]*)\"$")
+    public void получениеСборокЗаПериодИСФлагомОтображенияУпавшихСборок(IntervalDate period, Boolean failed) throws Throwable {
 
-        // Given
         RunList<Run> buildList = RunList.fromRuns(Arrays.asList(build, build2));
         given(job.getBuilds())
                 .willReturn(buildList);
-        buildDurationLogic = new BuildDurationLogic(IntervalDate.MONTH, true,  job.getBuilds());
+        buildDurationLogic = new BuildDurationLogic(period, failed,  job.getBuilds());
+    }
 
-        // When
-        Map<String, Double> map = buildDurationLogic.getBuildsDuration(Statistics.SUM);
+    @Когда("^выбран статистический показатель \"([^\"]*)\"$")
+    public void выбранСтатистическийПоказатель(Statistics statistics) throws Throwable {
+        map = buildDurationLogic.getBuildsDuration(statistics);
+    }
 
-        // Then
+    @Тогда("^отбираются успешные и упавшие сборки за месяц с рассчетом суммарного времени$")
+    public void отбираютсяУспешныеИУпавшиеСборкиЗаМесяцСПассчетомСуммарногоВремени() throws Throwable {
         then(map)
                 .as("Check that map is not contain date two month ago entry with 20.0 time build duration")
                 .doesNotContainEntry(formatTwoMonthAgo, 20.0)
@@ -142,41 +143,5 @@ public class BuildConfigurationStatisticsBDDTest {
                 .containsEntry(formatNow, 10.0)
                 .as("Check that map has size how last month of days")
                 .hasSize(DateTimeHandler.getLastMonthDays());
-
-    }
-
-    @Test
-    public void testGetBuildsDurationJSON() throws ParseException {
-
-        // Given
-        RunList<Run> buildList2 = RunList.fromRuns(Arrays.asList(build, build2, build3, build4));
-        given(job.getBuilds())
-                .willReturn(buildList2);
-        buildConfigurationStatisticsAction = new BuildConfigurationStatisticsAction(job);
-
-        // When
-        String jsonData = buildConfigurationStatisticsAction.getBuildDuration("QUARTER", "0","AVG");
-
-        Map<String, Object> jsonMap = new Gson().fromJson(
-                jsonData, new TypeToken<HashMap<String, Object>>() {}.getType()
-        );
-
-        // Then
-        then(jsonMap)
-                .as("Check that json is correct")
-                .doesNotContainKey(formatFiveMonthAgoQuarter)
-                .as("Check that map is not contain date two month ago")
-                .doesNotContainEntry(formatNowQuarter, 10.0)
-                .as("Check that map is contain date now")
-                .containsKey(formatTwoMonthAgoQuarter)
-                .as("Check that map is contain date now value and initial values")
-                .containsValues(15.0)
-                .as("Check that map is contain date now entry with 10.0 time build duration")
-                .containsEntry(formatTwoMonthAgoQuarter, 15.0)
-                .as("Check that map has size how last month of days")
-                .hasSize(3);
-
-    }
-
-
+   }
 }

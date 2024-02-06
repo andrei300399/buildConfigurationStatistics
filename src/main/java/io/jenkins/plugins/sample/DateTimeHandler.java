@@ -267,10 +267,10 @@ public class DateTimeHandler {
      * **/
 
     public static HashMap<String, HashMap<String,Integer>> createDateQuarterMapSuccessRate() {
-        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(4);
+        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(3);
         LOGGER.log(Level.INFO, "dateTime QuarterMapSuccess" + dateTime);
         HashMap<String, HashMap<String,Integer>> successFailSuccess = new HashMap();
-        int lenQuarterSuccess = 4;
+        int lenQuarterSuccess = 3;
         LOGGER.log(Level.INFO, "lenQuarterSuccess QuarterMapSuccess: " + lenQuarterSuccess);
         for (int i = 1; i <= lenQuarterSuccess; i++) {
 
@@ -375,10 +375,10 @@ public class DateTimeHandler {
      *
      * **/
     public static HashMap<String, Integer> createDateQuarterMapTestCount() {
-        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(4);
+        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(3);
         LOGGER.log(Level.INFO, "last quarter dateTime test" + dateTime);
         HashMap<String, Integer> quarterDuration = new HashMap<String, Integer>();
-        int lengthQuarter = 4; // any year length in month
+        int lengthQuarter = 3; // any year length in month
         LOGGER.log(Level.INFO, "lengthQuarter test: " + lengthQuarter);
         for (int i = 1; i <= lengthQuarter; i++) {
 
@@ -463,10 +463,10 @@ public class DateTimeHandler {
      *
      * **/
     public static HashMap<String, List<Double>> createDateQuarterMap() {
-        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(4);
+        ZonedDateTime dateTime = ZonedDateTime.now().minusMonths(3);
         LOGGER.log(Level.INFO, "last quarter dateTime" + dateTime);
         HashMap<String, List<Double>> quarterDuration = new HashMap<String, List<Double>>();
-        int lengthQuarter = 4; // any year length in month
+        int lengthQuarter = 3; // any year length in month
         LOGGER.log(Level.INFO, "lengthQuarter: " + lengthQuarter);
         for (int i = 1; i <= lengthQuarter; i++) {
 
