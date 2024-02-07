@@ -1,5 +1,6 @@
 package io.jenkins.plugins.sample;
 import io.cucumber.java.Before;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.ru.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -63,6 +64,7 @@ public class MyStepdefs {
     String formatTwoWeekAgo;
 
     Map<String, Double> map;
+    Map<String, Object> jsonMap;
 
 
     @Before
@@ -120,7 +122,7 @@ public class MyStepdefs {
         RunList<Run> buildList = RunList.fromRuns(Arrays.asList(build, build2));
         given(job.getBuilds())
                 .willReturn(buildList);
-        buildDurationLogic = new BuildDurationLogic(period, failed,  job.getBuilds());
+        buildDurationLogic = new BuildDurationLogic(period, failed, job.getBuilds());
     }
 
     @Когда("^выбран статистический показатель \"([^\"]*)\"$")
@@ -128,8 +130,8 @@ public class MyStepdefs {
         map = buildDurationLogic.getBuildsDuration(statistics);
     }
 
-    @Тогда("^отбираются успешные и упавшие сборки за месяц с рассчетом суммарного времени$")
-    public void отбираютсяУспешныеИУпавшиеСборкиЗаМесяцСПассчетомСуммарногоВремени() throws Throwable {
+    @Тогда("^отбираются успешные и упавшие сборки за месяц с вычислением суммарного времени$")
+    public void отбираютсяУспешныеИУпавшиеСборкиЗаМесяцСВычислениемСуммарногоВремени() throws Throwable {
         then(map)
                 .as("Check that map is not contain date two month ago entry with 20.0 time build duration")
                 .doesNotContainEntry(formatTwoMonthAgo, 20.0)
@@ -143,5 +145,45 @@ public class MyStepdefs {
                 .containsEntry(formatNow, 10.0)
                 .as("Check that map has size how last month of days")
                 .hasSize(DateTimeHandler.getLastMonthDays());
-   }
+    }
+
+    @Дано("^сформировано (\\d+) запуска задания$")
+    public void сформированыЗапускиЗадания(int countRuns) throws Throwable {
+
+        if (countRuns == 4) {
+            RunList<Run> buildList2 = RunList.fromRuns(Arrays.asList(build, build2, build3, build4));
+            given(job.getBuilds())
+                    .willReturn(buildList2);
+            buildConfigurationStatisticsAction = new BuildConfigurationStatisticsAction(job);
+        } else {
+            throw new PendingException();
+        }
+    }
+
+    @Когда("^выбраны параметры отображения за период \"([^\"]*)\" и с флагом отображения упавших сборок \"([^\"]*)\" и статистический показатель \"([^\"]*)\"$")
+    public void получениеСборокЗаПериодИСФлагомОтображенияУпавшихСборокПоПоказателю(String period, String failed, String statistics) throws Throwable {
+        String jsonData = buildConfigurationStatisticsAction.getBuildDuration(period, failed, statistics);
+
+        jsonMap = new Gson().fromJson(
+                jsonData, new TypeToken<HashMap<String, Object>>() {}.getType()
+        );
+    }
+
+    @Тогда("^отбираются успешные сборки за последние (\\d+) месяца с вычислением среднего времени$")
+    public void отбираютсяУспешныеСборкиЗаКварталСВычислениемСреднегоВремени(int countMonth) throws Throwable {
+        then(jsonMap)
+                .as("Check that json is correct")
+                .doesNotContainKey(formatFiveMonthAgoQuarter)
+                .as("Check that map is not contain date two month ago")
+                .doesNotContainEntry(formatNowQuarter, 10.0)
+                .as("Check that map is contain date now")
+                .containsKey(formatTwoMonthAgoQuarter)
+                .as("Check that map is contain date now value and initial values")
+                .containsValues(15.0)
+                .as("Check that map is contain date now entry with 10.0 time build duration")
+                .containsEntry(formatTwoMonthAgoQuarter, 15.0)
+                .as("Check that map has size how last month of days")
+                .hasSize(countMonth);
+    }
+
 }
