@@ -1,28 +1,18 @@
-# test1
+# Build Configuration Statistics Plugin
 
 ## Introduction
 
-TODO Describe what your plugin does here
+Плагин для просмотра статистики работы сборок Jenkins
 
-## Getting started
+## Запуск плагина
 
-TODO Tell users how to configure your plugin here, include screenshots, pipeline examples and 
-configuration-as-code examples.
+1. Перейти в папку склонированного плагина
+2. Запустить плагин и Jenkins mvn hpi:run -Dport=5000 -Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true
+3. http://localhost:5000/jenkins/ запустить jenkins
+4. Создать сборку
+5. Запустить сборку
+6. Перейти в меню Build Configuration Statistics слева
 
-## Issues
 
-TODO Decide where you're going to host your issues, the default is Jenkins JIRA, but you can also enable GitHub issues,
-If you use GitHub issues there's no need for this section; else add the following line:
 
-Report issues and enhancements in the [Jenkins issue tracker](https://issues.jenkins.io/).
-
-## Contributing
-
-TODO review the default [CONTRIBUTING](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md) file and make sure it is appropriate for your plugin, if not then add your own one adapted from the base file
-
-Refer to our [contribution guidelines](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md)
-
-## LICENSE
-
-Licensed under MIT, see [LICENSE](LICENSE.md)
 
