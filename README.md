@@ -1,28 +1,54 @@
-# test1
+# Build Configuration Statistics Plugin
 
-## Introduction
+## Введение
 
-TODO Describe what your plugin does here
+Добро пожаловать на страницу прототипа плагина для просмотра статистики работы сборок Jenkins. Работа выполнена в рамках ВКР бакалавра. Разработанное решение является прототипом. Этот плагин/модуль требуется для того чтобы отслеживать состояние отдельных конфигураций сборки с течением времени, плагин собирает статистические данные по всей истории сборки и отображает их в виде наглядных диаграмм. Является аналогом модуля Statistics в TeamCity
 
-## Getting started
+## Об авторе
 
-TODO Tell users how to configure your plugin here, include screenshots, pipeline examples and 
-configuration-as-code examples.
+Автор и разработчик плагина студент СПбПУ (Политех) Кухто Андрей Денисович. Научный руководитель Пархоменко Владимир Андреевич.
 
-## Issues
+## Запуск плагина
 
-TODO Decide where you're going to host your issues, the default is Jenkins JIRA, but you can also enable GitHub issues,
-If you use GitHub issues there's no need for this section; else add the following line:
+### Для запуска на Windows или Linux локально (запускается вместе с Jenkins, установка Jenkins не требуется) с помощью maven
 
-Report issues and enhancements in the [Jenkins issue tracker](https://issues.jenkins.io/).
+1. Перейти в папку склонированного плагина
+2. Запустить плагин и Jenkins командой:
+   
+ ```mvn hpi:run -Dport=5000 -Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true```
+ 
+3. http://localhost:5000/jenkins/ запустить jenkins
+4. Создать сборку (freestyle job или pipeline)
+5. Запустить сборку
+6. Перейти в меню Build Configuration Statistics слева
 
-## Contributing
+ ### Для запуска на сервере с установленным Jenkins
 
-TODO review the default [CONTRIBUTING](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md) file and make sure it is appropriate for your plugin, if not then add your own one adapted from the base file
+1. Перейти в папку склонированного плагина
+2. Выполнить команду Maven ```mvn install```
+3. Скопировать .hpi в папку /plugins/
+4. На запущенном сервере Jenkins перейти в Управление Jenkins и среди доступных плагинов выбрать Build Configuration Statistics и установить
+5. Перейти в меню Build Configuration Statistics слева
 
-Refer to our [contribution guidelines](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md)
+## Тестирование плагина
+Тестирование выполнялось на frontend-maven-plugin (https://github.com/eirslett/frontend-maven-plugin).
 
-## LICENSE
+Для моделирования ситуации просмотра статистики по метрикам сборки в условиях разных версий продукта, когда вносятся значительные изменения в код, что влечет за собой увеличния, в возможно и уменьшения (в случаи оптимизации) времени сборки продукта, необходимо откатиться к более ранним коммитам.
 
-Licensed under MIT, see [LICENSE](LICENSE.md)
+Для того чтобы откатиться к предыдущим версиям, были проделаны следующие действия:
+A. Сделать fork проекта в личный репозиторий.
+B. Найти подходящий коммит, в котором были выполнены значительные
+изменения (более 500 строк измененного кода).
+C. Откатиться до найденного коммита.
+D. Создание новой ветки на основе коммита, до которого произошел откат.
+E. Отправка ветки в личный удаленный репозиторий на GitHub.
+
+После того как произведен откат до выбранного коммита, необходимо повторить процедуру начиная с коммита, до которого был произведен откат. Процедура была повторена 12 раз т.е. было сгенерировано 12 версий проекта на 12 месяцев года (для генерации сборок на год).
+
+Скрипт формирования "версий" git_handler.py
+
+Для того чтобы отредактировать дату запуска, чтобы увидеть изменения истории сборки был написан скрипт parsrXmlBuilds.py. Время в каждой сборке было отредактировано на каждый месяц за прошедший год.
+
+
+
 
