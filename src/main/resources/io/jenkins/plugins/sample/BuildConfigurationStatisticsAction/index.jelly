@@ -196,7 +196,6 @@
                                                         <option value="YEAR">Year</option>
                                                         <option value="WEEK">Week</option>
                                                         <option value="QUARTER">Quarter</option>
-                                                        <option value="ALL">All</option>
                                                 </select>
 
                                         </label>
@@ -226,7 +225,6 @@
                                                         <option value="YEAR">Year</option>
                                                         <option value="WEEK">Week</option>
                                                         <option value="QUARTER">Quarter</option>
-                                                        <option value="ALL">All</option>
                                                 </select>
 
 
@@ -286,7 +284,6 @@
                                                         <option value="YEAR">Year</option>
                                                         <option value="WEEK">Week</option>
                                                         <option value="QUARTER">Quarter</option>
-                                                        <option value="ALL">All</option>
                                                 </select>
 
                                         </label>
@@ -332,7 +329,6 @@
                                                         <option value="YEAR">Year</option>
                                                         <option value="WEEK">Week</option>
                                                         <option value="QUARTER">Quarter</option>
-                                                        <option value="ALL">All</option>
                                                 </select>
 
                                         </label>
@@ -366,7 +362,6 @@
                                                         <option value="YEAR">Year</option>
                                                         <option value="WEEK">Week</option>
                                                         <option value="QUARTER">Quarter</option>
-                                                        <option value="ALL">All</option>
                                                 </select>
 
                                         </label>
