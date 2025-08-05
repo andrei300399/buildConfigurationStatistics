@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<build>
+  <actions>
+    <hudson.model.CauseAction>
+      <causeBag class="linked-hash-map">
+        <entry>
+          <hudson.model.Cause_-UserIdCause/>
+          <int>1</int>
+        </entry>
+      </causeBag>
+    </hudson.model.CauseAction>
+    <hudson.plugins.git.GitSCM>
+      <remoteUrl>https://github.com/andrei300399/frontend-maven-plugin</remoteUrl>
+      <branch>main</branch>
+      <commitId>abc123def456</commitId>
+    </hudson.plugins.git.GitSCM>
+  </actions>
+  <queueId>1</queueId>
+  <timestamp>1754422593748</timestamp>
+  <startTime>1754422593762</startTime>
+  <result>SUCCESS</result>
+  <duration>428</duration>
+  <charset>UTF-8</charset>
+  <keepLog>false</keepLog>
+  <builtOn></builtOn>
+  <workspace>/Users/akukhto/git/buildConfigurationStatistics/work/workspace/build-git</workspace>
+  <hudsonVersion>2.440.3</hudsonVersion>
+  <scm class="hudson.plugins.git.GitSCM">
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/username/repo.git</url>
+        <credentialsId>git-credentials-id</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/main</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+  </scm>
+
+  <!-- Добавление этапа сборки с использованием Maven и frontend-maven-plugin -->
+  <mavenBuild>
+    <goals>clean install</goals>
+    <pomFile>pom.xml</pomFile>
+    <properties>
+      <property>
+        <name>frontend-maven-plugin.version</name>
+        <value>1.12.0</value> <!-- Укажите актуальную версию плагина -->
+      </property>
+    </properties>
+  </mavenBuild>
+
+  <culprits class="java.util.Collections$UnmodifiableSet">
+    <c class="sorted-set"/>
+  </culprits>
+</build>
